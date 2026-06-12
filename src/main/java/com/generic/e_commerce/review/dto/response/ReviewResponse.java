@@ -1,6 +1,6 @@
 package com.generic.e_commerce.review.dto.response;
 
-import com.ecommerce.review.model.Review;
+import com.generic.e_commerce.review.model.Review;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

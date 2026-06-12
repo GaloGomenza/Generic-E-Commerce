@@ -1,6 +1,6 @@
 package com.generic.e_commerce.cart.repository;
 
-import com.ecommerce.cart.model.CartItem;
+import com.generic.e_commerce.cart.model.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

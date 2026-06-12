@@ -1,8 +1,8 @@
 package com.generic.e_commerce.cart.service;
 
-import com.ecommerce.cart.dto.request.AddToCartRequest;
-import com.ecommerce.cart.dto.request.UpdateCartItemRequest;
-import com.ecommerce.cart.dto.response.CartItemResponse;
+import com.generic.e_commerce.cart.dto.request.AddToCartRequest;
+import com.generic.e_commerce.cart.dto.request.UpdateCartItemRequest;
+import com.generic.e_commerce.cart.dto.response.CartItemResponse;
 
 import java.util.List;
 

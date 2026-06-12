@@ -1,4 +1,4 @@
-package com.ecommerce.user.dto.request;
+package com.generic.e_commerce.user.dto.request;
 
 import jakarta.validation.constraints.Email;
 import lombok.Getter;

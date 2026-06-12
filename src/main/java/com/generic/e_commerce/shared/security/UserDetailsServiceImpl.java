@@ -1,7 +1,7 @@
-package com.ecommerce.shared.security;
+package com.generic.e_commerce.shared.security;
 
-import com.ecommerce.user.model.User;
-import com.ecommerce.user.repository.UserRepository;
+import com.generic.e_commerce.user.model.User;
+import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

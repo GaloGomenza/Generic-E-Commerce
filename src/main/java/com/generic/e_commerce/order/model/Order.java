@@ -1,6 +1,6 @@
-package com.ecommerce.order.model;
+package com.generic.e_commerce.order.model;
 
-import com.ecommerce.user.model.User;
+import com.generic.e_commerce.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,7 +38,7 @@ public class Order {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<OrderItem> items = new ArrayList<>();
+    private List<com.generic.e_commerce.order.model.OrderItem> items = new ArrayList<>();
 
     public enum OrderStatus {
         PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED

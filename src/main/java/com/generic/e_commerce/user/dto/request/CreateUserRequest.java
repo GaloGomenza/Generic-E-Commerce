@@ -1,6 +1,6 @@
-package com.ecommerce.user.dto.request;
+package com.generic.e_commerce.user.dto.request;
 
-import com.ecommerce.user.model.User;
+import com.generic.e_commerce.user.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

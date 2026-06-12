@@ -1,10 +1,10 @@
 package com.generic.e_commerce.category.service;
 
-import com.ecommerce.category.dto.request.CategoryRequest;
-import com.ecommerce.category.dto.response.CategoryResponse;
-import com.ecommerce.category.model.Category;
-import com.ecommerce.category.repository.CategoryRepository;
-import com.ecommerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.category.dto.request.CategoryRequest;
+import com.generic.e_commerce.category.dto.response.CategoryResponse;
+import com.generic.e_commerce.category.model.Category;
+import com.generic.e_commerce.category.repository.CategoryRepository;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

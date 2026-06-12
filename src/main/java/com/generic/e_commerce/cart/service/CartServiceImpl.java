@@ -1,16 +1,16 @@
 package com.generic.e_commerce.cart.service;
 
-import com.ecommerce.cart.dto.request.AddToCartRequest;
-import com.ecommerce.cart.dto.request.UpdateCartItemRequest;
-import com.ecommerce.cart.dto.response.CartItemResponse;
-import com.ecommerce.cart.model.CartItem;
-import com.ecommerce.cart.repository.CartItemRepository;
-import com.ecommerce.product.model.Product;
-import com.ecommerce.product.repository.ProductRepository;
-import com.ecommerce.shared.exception.ResourceNotFoundException;
-import com.ecommerce.shared.exception.UnauthorizedException;
-import com.ecommerce.user.model.User;
-import com.ecommerce.user.repository.UserRepository;
+import com.generic.e_commerce.cart.dto.request.AddToCartRequest;
+import com.generic.e_commerce.cart.dto.request.UpdateCartItemRequest;
+import com.generic.e_commerce.cart.dto.response.CartItemResponse;
+import com.generic.e_commerce.cart.model.CartItem;
+import com.generic.e_commerce.cart.repository.CartItemRepository;
+import com.generic.e_commerce.product.model.Product;
+import com.generic.e_commerce.product.repository.ProductRepository;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.shared.exception.UnauthorizedException;
+import com.generic.e_commerce.user.model.User;
+import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

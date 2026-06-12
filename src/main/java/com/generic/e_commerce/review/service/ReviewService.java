@@ -1,7 +1,7 @@
 package com.generic.e_commerce.review.service;
 
-import com.ecommerce.review.dto.request.ReviewRequest;
-import com.ecommerce.review.dto.response.ReviewResponse;
+import com.generic.e_commerce.review.dto.request.ReviewRequest;
+import com.generic.e_commerce.review.dto.response.ReviewResponse;
 
 import java.util.List;
 

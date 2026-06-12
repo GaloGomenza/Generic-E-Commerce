@@ -1,0 +1,554 @@
+======================================================================
+ POSTMAN TESTING GUIDE - Generic E-Commerce API
+ Flujo completo: Registro -> Categorias -> Productos -> Carrito -> Orden
+======================================================================
+
+BASE URL: http://localhost:8080
+AUTH: HTTP Basic (excepto register/login y GETs publicos)
+
+La mayoria de endpoints protegidos requieren:
+  - Authorization: Basic <base64(email:password)>
+  - X-User-Email: <email>  (en cart, order, review)
+
+======================================================
+ PASO 1: Registrar usuario ADMIN
+======================================================
+POST {{BASE_URL}}/api/users/register
+Content-Type: application/json
+
+{
+  "email": "admin@tienda.com",
+  "password": "admin123",
+  "name": "Admin Principal",
+  "role": "ADMIN"
+}
+
+---
+ Respuesta esperada: 201 Created
+{
+  "id": 1,
+  "email": "admin@tienda.com",
+  "name": "Admin Principal",
+  "role": "ADMIN"
+}
+
+
+======================================================
+ PASO 2: Registrar usuario CLIENTE
+======================================================
+POST {{BASE_URL}}/api/users/register
+Content-Type: application/json
+
+{
+  "email": "cliente@email.com",
+  "password": "cliente123",
+  "name": "Juan Perez",
+  "role": "USER"
+}
+
+---
+ Respuesta esperada: 201 Created
+{
+  "id": 2,
+  "email": "cliente@email.com",
+  "name": "Juan Perez",
+  "role": "USER"
+}
+
+
+======================================================
+ PASO 3: Login como ADMIN
+======================================================
+POST {{BASE_URL}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "admin@tienda.com",
+  "password": "admin123"
+}
+
+---
+ Respuesta esperada: 200 OK
+{
+  "token": "Basic admin@tienda.com:admin123",
+  "email": "admin@tienda.com",
+  "name": "Admin Principal",
+  "role": "ADMIN"
+}
+
+GUARDAR el token para usarlo en las requests de admin.
+
+Basic admin@tienda.com:admin123
+
+======================================================
+ PASO 4: Crear Categoria ELECTRONICA (admin)
+======================================================
+POST {{BASE_URL}}/api/categories
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Electronica",
+  "description": "Productos electronicos y gadgets"
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 1,
+  "name": "Electronica",
+  "description": "Productos electronicos y gadgets"
+}
+
+
+======================================================
+ PASO 5: Crear Categoria HOGAR (admin)
+======================================================
+POST {{BASE_URL}}/api/categories
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Hogar",
+  "description": "Articulos para el hogar"
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 2,
+  "name": "Hogar",
+  "description": "Articulos para el hogar"
+}
+
+
+======================================================
+ PASO 6: Listar categorias (publico)
+======================================================
+GET {{BASE_URL}}/api/categories
+
+---
+ Respuesta: 200 OK (array con las 2 categorias)
+
+
+======================================================
+ PASO 7: Crear Producto NOTEBOOK (admin)
+======================================================
+POST {{BASE_URL}}/api/products
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Notebook Pro 15",
+  "description": "Notebook 15 pulgadas, 16GB RAM, 512GB SSD",
+  "price": 1500.00,
+  "stock": 10,
+  "categoryId": 1
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 1,
+  "name": "Notebook Pro 15",
+  "description": "Notebook 15 pulgadas, 16GB RAM, 512GB SSD",
+  "price": 1500.00,
+  "stock": 10,
+  "categoryId": 1,
+  "categoryName": "Electronica"
+}
+
+
+======================================================
+ PASO 8: Crear Producto MOUSE (admin)
+======================================================
+POST {{BASE_URL}}/api/products
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Mouse Inalambrico",
+  "description": "Mouse ergonomico inalambrico",
+  "price": 45.99,
+  "stock": 50,
+  "categoryId": 1
+}
+
+---
+ Respuesta: 201 Created
+
+
+======================================================
+ PASO 9: Crear Producto LAMPARA (admin)
+======================================================
+POST {{BASE_URL}}/api/products
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Lampara de Mesa LED",
+  "description": "Lampara LED recargable, 3 intensidades",
+  "price": 29.99,
+  "stock": 25,
+  "categoryId": 2
+}
+
+---
+ Respuesta: 201 Created
+
+
+======================================================
+ PASO 10: Listar productos con filtros (publico)
+======================================================
+GET {{BASE_URL}}/api/products                              (todos)
+GET {{BASE_URL}}/api/products?name=mouse                   (por nombre)
+GET {{BASE_URL}}/api/products?categoryId=1                 (por categoria)
+GET {{BASE_URL}}/api/products?minPrice=10&maxPrice=100     (por rango precio)
+
+
+======================================================
+ PASO 11: Ver producto por ID (publico)
+======================================================
+GET {{BASE_URL}}/api/products/1
+
+
+======================================================
+ PASO 12: Login como CLIENTE
+======================================================
+POST {{BASE_URL}}/api/users/login
+Content-Type: application/json
+
+{
+  "email": "cliente@email.com",
+  "password": "cliente123"
+}
+
+---
+ Respuesta: 200 OK
+Guardar token: "Basic cliente@email.com:cliente123"
+
+Basic cliente@email.com:cliente123
+
+======================================================
+ PASO 13: Agregar NOTEBOOK al carrito (cliente)
+======================================================
+POST {{BASE_URL}}/api/cart
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 1,
+  "userId": 1,
+  "productId": 1,
+  "productName": "Notebook Pro 15",
+  "productPrice": 1500.00,
+  "quantity": 2,
+  "subtotal": 3000.00
+}
+
+
+======================================================
+ PASO 14: Agregar MOUSE al carrito (cliente)
+======================================================
+POST {{BASE_URL}}/api/cart
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+{
+  "productId": 2,
+  "quantity": 1
+}
+
+---
+ Respuesta: 201 Created
+
+
+======================================================
+ PASO 15: Ver items del carrito (cliente)
+======================================================
+GET {{BASE_URL}}/api/cart
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+---
+ Respuesta: 200 OK (array con los items)
+
+
+======================================================
+ PASO 16: Actualizar cantidad de un item del carrito (cliente)
+======================================================
+PUT {{BASE_URL}}/api/cart/1
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+x
+
+---
+ Respuesta: 200 OK (item actualizado con subtotal = 1500)
+
+
+======================================================
+ PASO 17: Crear ORDEN (checkout - cliente)
+======================================================
+POST {{BASE_URL}}/api/orders
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+{
+  "cartItemIds": []    <-- vacio = toma todos los items del carrito
+}
+
+--- OPCIONAL: pasar IDs especificos ---
+{
+  "cartItemIds": [1, 2]
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 1,
+  "userId": 1,
+  "orderDate": "2025-01-15T10:30:00",
+  "status": "PENDING",
+  "total": 1545.99,
+  "items": [ ... ]
+}
+
+
+======================================================
+ PASO 18: Listar ordenes del usuario (cliente)
+======================================================
+GET {{BASE_URL}}/api/orders
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+---
+ Respuesta: 200 OK (array de ordenes)
+
+
+======================================================
+ PASO 19: Filtrar ordenes por estado (cliente)
+======================================================
+GET {{BASE_URL}}/api/orders?status=PENDING
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+
+======================================================
+ PASO 20: Ver detalle de orden por ID (cliente)
+======================================================
+GET {{BASE_URL}}/api/orders/1
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+
+======================================================
+ PASO 21: CANCELAR orden (cliente)
+ Solo se pueden cancelar ordenes en estado PENDING
+======================================================
+POST {{BASE_URL}}/api/orders/1/cancel
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+---
+ Respuesta: 200 OK
+{
+  "message": "Order cancelled successfully"
+}
+
+
+======================================================
+ PASO 22: Crear REVIEW (cliente)
+======================================================
+POST {{BASE_URL}}/api/reviews
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "rating": 5,
+  "comment": "Excelente notebook, muy rapida y ligera"
+}
+
+---
+ Respuesta: 201 Created
+{
+  "id": 1,
+  "userId": 1,
+  "userName": "Juan Perez",
+  "productId": 1,
+  "productName": "Notebook Pro 15",
+  "rating": 5,
+  "comment": "Excelente notebook, muy rapida y ligera"
+}
+
+
+======================================================
+ PASO 23: Ver reviews de un producto (publico)
+======================================================
+GET {{BASE_URL}}/api/reviews/product/1
+
+---
+ Respuesta: 200 OK (array de reviews)
+
+
+======================================================
+ PASO 24: Actualizar review (cliente - solo su review)
+======================================================
+PUT {{BASE_URL}}/api/reviews/1
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Muy buena, solo que el teclado podria ser mejor"
+}
+
+---
+ Respuesta: 200 OK
+
+
+======================================================
+ PASO 25: Eliminar review (cliente - solo su review)
+======================================================
+DELETE {{BASE_URL}}/api/reviews/1
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+
+======================================================
+ PASO 26: Ver perfil del usuario logueado
+======================================================
+GET {{BASE_URL}}/api/users/me
+Authorization: Basic cliente@email.com:cliente123
+X-User-Email: cliente@email.com
+
+
+======================================================
+ PASO 27: ADMIN - Listar todos los usuarios
+======================================================
+GET {{BASE_URL}}/api/users
+Authorization: Basic admin@tienda.com:admin123
+
+
+======================================================
+ PASO 28: ADMIN - Actualizar producto
+======================================================
+PUT {{BASE_URL}}/api/products/1
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Notebook Pro 15 - 2025",
+  "description": "Notebook 15 pulgadas, 32GB RAM, 1TB SSD",
+  "price": 1800.00,
+  "stock": 8,
+  "categoryId": 1
+}
+
+
+======================================================
+ PASO 29: ADMIN - Eliminar producto
+======================================================
+DELETE {{BASE_URL}}/api/products/3
+Authorization: Basic admin@tienda.com:admin123
+
+
+======================================================
+ PASO 30: ADMIN - Actualizar categoria
+======================================================
+PUT {{BASE_URL}}/api/categories/1
+Authorization: Basic admin@tienda.com:admin123
+Content-Type: application/json
+
+{
+  "name": "Electronica y Tecnologia",
+  "description": "Gadgets y dispositivos electronicos"
+}
+
+
+======================================================
+ PASO 31: ADMIN - Eliminar categoria
+======================================================
+DELETE {{BASE_URL}}/api/categories/2
+Authorization: Basic admin@tienda.com:admin123
+
+
+======================================================
+ ENDPOINTS ADICIONALES - Gestion de usuarios
+======================================================
+
+ACTUALIZAR usuario:
+  PUT {{BASE_URL}}/api/users/2
+  Authorization: Basic cliente@email.com:cliente123
+  Content-Type: application/json
+  {
+    "name": "Juan Pablo Perez",
+    "email": "jp-perez@email.com",
+    "password": "nuevopass123"
+  }
+
+OBTENER usuario por ID:
+  GET {{BASE_URL}}/api/users/2
+  Authorization: Basic admin@tienda.com:admin123
+
+ELIMINAR usuario (solo admin):
+  DELETE {{BASE_URL}}/api/users/2
+  Authorization: Basic admin@tienda.com:admin123
+
+
+======================================================
+ BUSQUEDA de categorias por nombre
+======================================================
+GET {{BASE_URL}}/api/categories?name=electronica
+
+
+======================================================
+ H2 CONSOLE (opcional - ver DB)
+======================================================
+URL: http://localhost:8080/h2-console
+JDBC URL: jdbc:h2:mem:testdb
+User: sa
+Password: (vacio)
+
+
+======================================================
+ NOTAS IMPORTANTES
+======================================================
+1. El carrito usa X-User-Email header pero el userId esta
+   hardcodeado a 1L en el controller. Siempre se opera
+   sobre el usuario con ID=1 (primer usuario registrado).
+
+2. Los endpoints de orden y review tambien tienen userId
+   hardcodeado a 1L.
+
+3. Para probar con multiples usuarios, habria que modificar
+   los controllers para obtener el userId desde el email
+   del header X-User-Email.
+
+4. Spring Security usa HTTP Basic con NoOpPasswordEncoder
+   (sin encriptacion).
+
+5. La base de datos H2 es en memoria: los datos se pierden
+   al reiniciar la aplicacion.
+
+6. Para iniciar:
+   cd Generic-E-Commerce
+   ./mvnw.cmd spring-boot:run
+
+======================================================================
+ FIN DEL DOCUMENTO
+======================================================================

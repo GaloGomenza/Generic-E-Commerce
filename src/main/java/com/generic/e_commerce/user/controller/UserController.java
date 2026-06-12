@@ -1,12 +1,12 @@
-package com.ecommerce.user.controller;
+package com.generic.e_commerce.user.controller;
 
-import com.ecommerce.shared.dto.ApiResponse;
-import com.ecommerce.user.dto.request.CreateUserRequest;
-import com.ecommerce.user.dto.request.LoginRequest;
-import com.ecommerce.user.dto.request.UpdateUserRequest;
-import com.ecommerce.user.dto.response.LoginResponse;
-import com.ecommerce.user.dto.response.UserResponse;
-import com.ecommerce.user.service.UserService;
+import com.generic.e_commerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.user.dto.request.CreateUserRequest;
+import com.generic.e_commerce.user.dto.request.LoginRequest;
+import com.generic.e_commerce.user.dto.request.UpdateUserRequest;
+import com.generic.e_commerce.user.dto.response.LoginResponse;
+import com.generic.e_commerce.user.dto.response.UserResponse;
+import com.generic.e_commerce.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

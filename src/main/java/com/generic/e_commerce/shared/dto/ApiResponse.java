@@ -1,4 +1,4 @@
-package com.ecommerce.shared.dto;
+package com.generic.e_commerce.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

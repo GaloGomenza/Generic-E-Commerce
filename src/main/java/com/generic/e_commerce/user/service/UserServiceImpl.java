@@ -1,14 +1,14 @@
-package com.ecommerce.user.service;
+package com.generic.e_commerce.user.service;
 
-import com.ecommerce.shared.exception.ResourceNotFoundException;
-import com.ecommerce.shared.exception.UnauthorizedException;
-import com.ecommerce.user.dto.request.CreateUserRequest;
-import com.ecommerce.user.dto.request.LoginRequest;
-import com.ecommerce.user.dto.request.UpdateUserRequest;
-import com.ecommerce.user.dto.response.LoginResponse;
-import com.ecommerce.user.dto.response.UserResponse;
-import com.ecommerce.user.model.User;
-import com.ecommerce.user.repository.UserRepository;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.shared.exception.UnauthorizedException;
+import com.generic.e_commerce.user.dto.request.CreateUserRequest;
+import com.generic.e_commerce.user.dto.request.LoginRequest;
+import com.generic.e_commerce.user.dto.request.UpdateUserRequest;
+import com.generic.e_commerce.user.dto.response.LoginResponse;
+import com.generic.e_commerce.user.dto.response.UserResponse;
+import com.generic.e_commerce.user.model.User;
+import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements com.generic.e_commerce.user.service.UserService {
 
     private final UserRepository userRepository;
 

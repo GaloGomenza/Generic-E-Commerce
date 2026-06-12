@@ -1,11 +1,11 @@
-package com.ecommerce.user.service;
+package com.generic.e_commerce.user.service;
 
-import com.ecommerce.user.dto.request.CreateUserRequest;
-import com.ecommerce.user.dto.request.LoginRequest;
-import com.ecommerce.user.dto.request.UpdateUserRequest;
-import com.ecommerce.user.dto.response.LoginResponse;
-import com.ecommerce.user.dto.response.UserResponse;
-import com.ecommerce.user.model.User;
+import com.generic.e_commerce.user.dto.request.CreateUserRequest;
+import com.generic.e_commerce.user.dto.request.LoginRequest;
+import com.generic.e_commerce.user.dto.request.UpdateUserRequest;
+import com.generic.e_commerce.user.dto.response.LoginResponse;
+import com.generic.e_commerce.user.dto.response.UserResponse;
+import com.generic.e_commerce.user.model.User;
 
 import java.util.List;
 

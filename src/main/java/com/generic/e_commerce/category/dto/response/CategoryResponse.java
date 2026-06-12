@@ -1,6 +1,6 @@
 package com.generic.e_commerce.category.dto.response;
 
-import com.ecommerce.category.model.Category;
+import com.generic.e_commerce.category.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

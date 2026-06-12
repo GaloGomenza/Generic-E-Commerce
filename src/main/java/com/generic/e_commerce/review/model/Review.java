@@ -1,7 +1,7 @@
 package com.generic.e_commerce.review.model;
 
-import com.ecommerce.product.model.Product;
-import com.ecommerce.user.model.User;
+import com.generic.e_commerce.product.model.Product;
+import com.generic.e_commerce.user.model.User;
 import jakarta.persistence.*;
 import lombok.*;
 

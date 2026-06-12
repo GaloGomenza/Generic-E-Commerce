@@ -1,6 +1,6 @@
-package com.ecommerce.order.repository;
+package com.generic.e_commerce.order.repository;
 
-import com.ecommerce.order.model.OrderItem;
+import com.generic.e_commerce.order.model.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

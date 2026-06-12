@@ -1,10 +1,10 @@
 package com.generic.e_commerce.cart.controller;
 
-import com.ecommerce.cart.dto.request.AddToCartRequest;
-import com.ecommerce.cart.dto.request.UpdateCartItemRequest;
-import com.ecommerce.cart.dto.response.CartItemResponse;
-import com.ecommerce.cart.service.CartService;
-import com.ecommerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.cart.dto.request.AddToCartRequest;
+import com.generic.e_commerce.cart.dto.request.UpdateCartItemRequest;
+import com.generic.e_commerce.cart.dto.response.CartItemResponse;
+import com.generic.e_commerce.cart.service.CartService;
+import com.generic.e_commerce.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

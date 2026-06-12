@@ -1,15 +1,15 @@
 package com.generic.e_commerce.review.service;
 
-import com.ecommerce.product.model.Product;
-import com.ecommerce.product.repository.ProductRepository;
-import com.ecommerce.review.dto.request.ReviewRequest;
-import com.ecommerce.review.dto.response.ReviewResponse;
-import com.ecommerce.review.model.Review;
-import com.ecommerce.review.repository.ReviewRepository;
-import com.ecommerce.shared.exception.ResourceNotFoundException;
-import com.ecommerce.shared.exception.UnauthorizedException;
-import com.ecommerce.user.model.User;
-import com.ecommerce.user.repository.UserRepository;
+import com.generic.e_commerce.product.model.Product;
+import com.generic.e_commerce.product.repository.ProductRepository;
+import com.generic.e_commerce.review.dto.request.ReviewRequest;
+import com.generic.e_commerce.review.dto.response.ReviewResponse;
+import com.generic.e_commerce.review.model.Review;
+import com.generic.e_commerce.review.repository.ReviewRepository;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.shared.exception.UnauthorizedException;
+import com.generic.e_commerce.user.model.User;
+import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

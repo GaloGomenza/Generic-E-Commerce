@@ -1,6 +1,6 @@
-package com.ecommerce.user.dto.response;
+package com.generic.e_commerce.user.dto.response;
 
-import com.ecommerce.user.model.User;
+import com.generic.e_commerce.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

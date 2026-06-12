@@ -1,7 +1,7 @@
-package com.ecommerce.order.service;
+package com.generic.e_commerce.order.service;
 
-import com.ecommerce.order.dto.request.CreateOrderRequest;
-import com.ecommerce.order.dto.response.OrderResponse;
+import com.generic.e_commerce.order.dto.request.CreateOrderRequest;
+import com.generic.e_commerce.order.dto.response.OrderResponse;
 
 import java.util.List;
 

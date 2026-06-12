@@ -1,4 +1,4 @@
-package com.ecommerce.shared.utils;
+package com.generic.e_commerce.shared.utils;
 
 public class Constants {
     public static final String DEFAULT_PAGE = "0";

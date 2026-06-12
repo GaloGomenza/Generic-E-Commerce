@@ -1,9 +1,9 @@
 package com.generic.e_commerce.review.controller;
 
-import com.ecommerce.review.dto.request.ReviewRequest;
-import com.ecommerce.review.dto.response.ReviewResponse;
-import com.ecommerce.review.service.ReviewService;
-import com.ecommerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.review.dto.request.ReviewRequest;
+import com.generic.e_commerce.review.dto.response.ReviewResponse;
+import com.generic.e_commerce.review.service.ReviewService;
+import com.generic.e_commerce.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

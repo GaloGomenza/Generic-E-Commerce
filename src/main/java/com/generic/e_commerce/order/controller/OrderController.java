@@ -1,9 +1,9 @@
-package com.ecommerce.order.controller;
+package com.generic.e_commerce.order.controller;
 
-import com.ecommerce.order.dto.request.CreateOrderRequest;
-import com.ecommerce.order.dto.response.OrderResponse;
-import com.ecommerce.order.service.OrderService;
-import com.ecommerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.order.dto.request.CreateOrderRequest;
+import com.generic.e_commerce.order.dto.response.OrderResponse;
+import com.generic.e_commerce.order.service.OrderService;
+import com.generic.e_commerce.shared.dto.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

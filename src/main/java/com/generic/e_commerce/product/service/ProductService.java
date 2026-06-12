@@ -1,7 +1,7 @@
-package com.ecommerce.product.service;
+package com.generic.e_commerce.product.service;
 
-import com.ecommerce.product.dto.request.ProductRequest;
-import com.ecommerce.product.dto.response.ProductResponse;
+import com.generic.e_commerce.product.dto.request.ProductRequest;
+import com.generic.e_commerce.product.dto.response.ProductResponse;
 
 import java.math.BigDecimal;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.generic.e_commerce.review.repository;
 
-import com.ecommerce.review.model.Review;
+import com.generic.e_commerce.review.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.generic.e_commerce.category.service;
 
-import com.ecommerce.category.dto.request.CategoryRequest;
-import com.ecommerce.category.dto.response.CategoryResponse;
+import com.generic.e_commerce.category.dto.request.CategoryRequest;
+import com.generic.e_commerce.category.dto.response.CategoryResponse;
 
 import java.util.List;
 

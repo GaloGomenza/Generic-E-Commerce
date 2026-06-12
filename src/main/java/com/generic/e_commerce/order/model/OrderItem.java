@@ -1,6 +1,6 @@
-package com.ecommerce.order.model;
+package com.generic.e_commerce.order.model;
 
-import com.ecommerce.product.model.Product;
+import com.generic.e_commerce.product.model.Product;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +21,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
-    private Order order;
+    private com.generic.e_commerce.order.model.Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)

@@ -1,7 +1,7 @@
-package com.ecommerce.order.dto.response;
+package com.generic.e_commerce.order.dto.response;
 
-import com.ecommerce.order.model.Order;
-import com.ecommerce.order.model.OrderItem;
+import com.generic.e_commerce.order.model.Order;
+import com.generic.e_commerce.order.model.OrderItem;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
