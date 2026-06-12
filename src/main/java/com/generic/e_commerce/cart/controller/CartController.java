@@ -5,6 +5,8 @@ import com.generic.e_commerce.cart.dto.request.UpdateCartItemRequest;
 import com.generic.e_commerce.cart.dto.response.CartItemResponse;
 import com.generic.e_commerce.cart.service.CartService;
 import com.generic.e_commerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,17 +21,24 @@ import java.util.List;
 public class CartController {
 
     private final CartService cartService;
+    private final UserRepository userRepository;
+
+    private Long getUserId(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email))
+                .getId();
+    }
 
     @PostMapping
     public ResponseEntity<CartItemResponse> addToCart(
             @RequestHeader("X-User-Email") String email,
             @Valid @RequestBody AddToCartRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addToCart(1L, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addToCart(getUserId(email), request));
     }
 
     @GetMapping
     public ResponseEntity<List<CartItemResponse>> getCartItems(@RequestHeader("X-User-Email") String email) {
-        return ResponseEntity.ok(cartService.getCartItems(1L));
+        return ResponseEntity.ok(cartService.getCartItems(getUserId(email)));
     }
 
     @PutMapping("/{cartItemId}")
@@ -37,20 +46,20 @@ public class CartController {
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long cartItemId,
             @Valid @RequestBody UpdateCartItemRequest request) {
-        return ResponseEntity.ok(cartService.updateCartItem(1L, cartItemId, request));
+        return ResponseEntity.ok(cartService.updateCartItem(getUserId(email), cartItemId, request));
     }
 
     @DeleteMapping("/{cartItemId}")
     public ResponseEntity<ApiResponse> removeCartItem(
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long cartItemId) {
-        cartService.removeCartItem(1L, cartItemId);
+        cartService.removeCartItem(getUserId(email), cartItemId);
         return ResponseEntity.ok(new ApiResponse("Cart item removed successfully"));
     }
 
     @DeleteMapping
     public ResponseEntity<ApiResponse> clearCart(@RequestHeader("X-User-Email") String email) {
-        cartService.clearCart(1L);
+        cartService.clearCart(getUserId(email));
         return ResponseEntity.ok(new ApiResponse("Cart cleared successfully"));
     }
 }

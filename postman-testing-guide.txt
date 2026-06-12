@@ -528,24 +528,16 @@ Password: (vacio)
 ======================================================
  NOTAS IMPORTANTES
 ======================================================
-1. El carrito usa X-User-Email header pero el userId esta
-   hardcodeado a 1L en el controller. Siempre se opera
-   sobre el usuario con ID=1 (primer usuario registrado).
+1. El header X-User-Email es obligatorio en endpoints de
+   carrito, ordenes y reviews. Sin él da error 400.
 
-2. Los endpoints de orden y review tambien tienen userId
-   hardcodeado a 1L.
-
-3. Para probar con multiples usuarios, habria que modificar
-   los controllers para obtener el userId desde el email
-   del header X-User-Email.
-
-4. Spring Security usa HTTP Basic con NoOpPasswordEncoder
+2. Spring Security usa HTTP Basic con NoOpPasswordEncoder
    (sin encriptacion).
 
-5. La base de datos H2 es en memoria: los datos se pierden
+3. La base de datos H2 es en memoria: los datos se pierden
    al reiniciar la aplicacion.
 
-6. Para iniciar:
+4. Para iniciar:
    cd Generic-E-Commerce
    ./mvnw.cmd spring-boot:run
 

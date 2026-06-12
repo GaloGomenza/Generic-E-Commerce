@@ -4,6 +4,8 @@ import com.generic.e_commerce.review.dto.request.ReviewRequest;
 import com.generic.e_commerce.review.dto.response.ReviewResponse;
 import com.generic.e_commerce.review.service.ReviewService;
 import com.generic.e_commerce.shared.dto.ApiResponse;
+import com.generic.e_commerce.shared.exception.ResourceNotFoundException;
+import com.generic.e_commerce.user.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,12 +20,19 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final UserRepository userRepository;
+
+    private Long getUserId(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email))
+                .getId();
+    }
 
     @PostMapping
     public ResponseEntity<ReviewResponse> createReview(
             @RequestHeader("X-User-Email") String email,
             @Valid @RequestBody ReviewRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.createReview(1L, request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.createReview(getUserId(email), request));
     }
 
     @GetMapping("/product/{productId}")
@@ -33,7 +42,7 @@ public class ReviewController {
 
     @GetMapping("/user")
     public ResponseEntity<List<ReviewResponse>> getReviewsByUser(@RequestHeader("X-User-Email") String email) {
-        return ResponseEntity.ok(reviewService.getReviewsByUser(1L));
+        return ResponseEntity.ok(reviewService.getReviewsByUser(getUserId(email)));
     }
 
     @PutMapping("/{reviewId}")
@@ -41,14 +50,14 @@ public class ReviewController {
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewRequest request) {
-        return ResponseEntity.ok(reviewService.updateReview(1L, reviewId, request));
+        return ResponseEntity.ok(reviewService.updateReview(getUserId(email), reviewId, request));
     }
 
     @DeleteMapping("/{reviewId}")
     public ResponseEntity<ApiResponse> deleteReview(
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long reviewId) {
-        reviewService.deleteReview(1L, reviewId);
+        reviewService.deleteReview(getUserId(email), reviewId);
         return ResponseEntity.ok(new ApiResponse("Review deleted successfully"));
     }
 }
