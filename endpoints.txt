@@ -1,0 +1,54 @@
+GENERIC E-COMMERCE - LISTA COMPLETA DE ENDPOINTS
+=================================================
+
+USUARIOS (/api/users)
+---------------------
+POST   /api/users/register        - Registrar nuevo usuario
+POST   /api/users/login           - Iniciar sesion
+POST   /api/users/logout          - Cerrar sesion
+GET    /api/users/me              - Obtener usuario autenticado
+GET    /api/users/{id}            - Obtener usuario por ID
+GET    /api/users                 - Listar todos los usuarios (solo ADMIN)
+PUT    /api/users/{id}            - Actualizar usuario
+DELETE /api/users/{id}            - Eliminar usuario (solo ADMIN)
+
+CATEGORIAS (/api/categories)
+-----------------------------
+POST   /api/categories            - Crear categoria (solo ADMIN)
+GET    /api/categories?name=      - Listar/filtrar categorias
+GET    /api/categories/{id}       - Obtener categoria por ID
+PUT    /api/categories/{id}       - Actualizar categoria (solo ADMIN)
+DELETE /api/categories/{id}       - Eliminar categoria (solo ADMIN)
+
+PRODUCTOS (/api/products)
+--------------------------
+POST   /api/products              - Crear producto (solo ADMIN)
+GET    /api/products?name=&categoryId=&minPrice=&maxPrice= - Listar/filtrar productos
+GET    /api/products/{id}         - Obtener producto por ID
+PUT    /api/products/{id}         - Actualizar producto (solo ADMIN)
+DELETE /api/products/{id}         - Eliminar producto (solo ADMIN)
+
+CARRITO (/api/cart)
+-------------------
+POST   /api/cart                  - Agregar item al carrito (requiere X-User-Email)
+GET    /api/cart?productName=&minPrice=&maxPrice= - Listar/filtrar items del carrito (requiere X-User-Email)
+PUT    /api/cart/{cartItemId}     - Actualizar cantidad de item (requiere X-User-Email)
+DELETE /api/cart/{cartItemId}     - Eliminar item del carrito (requiere X-User-Email)
+DELETE /api/cart                  - Vaciar carrito (requiere X-User-Email)
+
+ORDENES (/api/orders)
+---------------------
+POST   /api/orders                - Crear orden / finalizar compra (requiere X-User-Email)
+GET    /api/orders?status=        - Listar/filtrar historial de compras (requiere X-User-Email)
+GET    /api/orders/{orderId}      - Obtener orden por ID (requiere X-User-Email)
+POST   /api/orders/{orderId}/cancel - Cancelar orden (requiere X-User-Email)
+
+REVIEWS (/api/reviews)
+-----------------------
+POST   /api/reviews               - Crear calificacion (requiere X-User-Email)
+GET    /api/reviews/product/{productId}?minRating=&maxRating= - Listar/filtrar calificaciones de un producto
+GET    /api/reviews/user          - Listar calificaciones del usuario (requiere X-User-Email)
+PUT    /api/reviews/{reviewId}    - Actualizar calificacion (requiere X-User-Email)
+DELETE /api/reviews/{reviewId}    - Eliminar calificacion (requiere X-User-Email)
+
+Total: 32 endpoints
