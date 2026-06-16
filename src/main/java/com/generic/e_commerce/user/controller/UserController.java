@@ -32,6 +32,12 @@ public class UserController {
         return ResponseEntity.ok(userService.login(request));
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse> logout(@RequestHeader("X-User-Email") String email) {
+        userService.logout(email);
+        return ResponseEntity.ok(new ApiResponse("Logged out successfully"));
+    }
+
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(@RequestHeader("X-User-Email") String email) {
         return ResponseEntity.ok(userService.getCurrentUser(email));

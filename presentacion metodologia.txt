@@ -1,0 +1,423 @@
+--- INICIO DEL ARCHIVO presentacion metodologia.txt ---
+
+RESUMEN EJECUTIVO:
+Se ha verificado la aplicacion 'Generic E-Commerce' contra el ERS. Se confirma que la aplicacion backend cumple con los 23 requisitos funcionales especificados. De los requisitos no funcionales, RNF 01 y RNF 02 fueron excluidos de esta verificacion; RNF 04 cumple; RNF 05, RNF 06 y RNF 07 no cumplen al tratarse de una API backend sin frontend ni cifrado real implementado.
+
+---
+
+VERIFICACION DE REQUISITOS FUNCIONALES:
+
+RF 01 - Iniciar Sesion
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: POST
+2. URL del Endpoint: /api/users/login
+3. Headers: Content-Type: application/json
+4. Body (JSON):
+{
+  "email": "admin@test.com",
+  "password": "123"
+}
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "token": "Basic admin@test.com:123", "email": "admin@test.com", "name": "Admin", "role": "ADMIN" }
+
+---
+
+RF 02 - Cerrar Sesion
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: POST
+2. URL del Endpoint: /api/users/logout
+3. Headers: Authorization: Basic <token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "message": "Logged out successfully" }
+   Nota: Dado que el sistema utiliza HTTP Basic stateless, el logout es una confirmacion del servidor. El cliente debe descartar el token localmente.
+
+---
+
+RF 03 - Ver Ficha Tecnica (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/users/me
+3. Headers: Authorization: Basic <base64(email:password)>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "id": 1, "email": "admin@test.com", "name": "Admin", "role": "ADMIN" }
+
+---
+
+RF 04 - ABM Categorias (Admin)
+Resultado: Cumple
+Pasos en Postman para verificar:
+a) Crear categoria:
+   1. Metodo HTTP: POST
+   2. URL del Endpoint: /api/categories
+   3. Headers: Content-Type: application/json, Authorization: Basic <admin_token>
+   4. Body (JSON): { "name": "Electronica", "description": "Productos electronicos" }
+   5. Codigo de Respuesta Esperado: 201 Created
+   6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Electronica", "description": "Productos electronicos" }
+
+b) Actualizar categoria:
+   1. Metodo HTTP: PUT
+   2. URL del Endpoint: /api/categories/1
+   3. Headers: Content-Type: application/json, Authorization: Basic <admin_token>
+   4. Body (JSON): { "name": "Electronica y Tecnologia", "description": "Actualizado" }
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Electronica y Tecnologia", "description": "Actualizado" }
+
+c) Eliminar categoria:
+   1. Metodo HTTP: DELETE
+   2. URL del Endpoint: /api/categories/1
+   3. Headers: Authorization: Basic <admin_token>
+   4. Body: -
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "message": "Category deleted successfully" }
+
+---
+
+RF 05 - Listar Categorias (Admin)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/categories
+3. Headers: Authorization: Basic <admin_token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "name": "Electronica", "description": "..." }, ... ]
+
+---
+
+RF 06 - Filtrar Categorias (Admin)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/categories?name=electronica
+3. Headers: Authorization: Basic <admin_token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "name": "Electronica", "description": "..." } ] (solo las que coinciden con el filtro)
+
+---
+
+RF 07 - Ver Ficha Tecnica de Categorias (Admin)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/categories/1
+3. Headers: Authorization: Basic <admin_token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Electronica", "description": "Productos electronicos" }
+
+---
+
+RF 08 - ABM de su propio Usuario (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+a) Crear usuario (registro):
+   1. Metodo HTTP: POST
+   2. URL del Endpoint: /api/users/register
+   3. Headers: Content-Type: application/json
+   4. Body (JSON): { "email": "cliente@test.com", "password": "123", "name": "Cliente", "role": "USER" }
+   5. Codigo de Respuesta Esperado: 201 Created
+   6. Estructura de la Respuesta Esperada: { "id": 2, "email": "cliente@test.com", "name": "Cliente", "role": "USER" }
+
+b) Actualizar usuario:
+   1. Metodo HTTP: PUT
+   2. URL del Endpoint: /api/users/2
+   3. Headers: Content-Type: application/json, Authorization: Basic <user_token>
+   4. Body (JSON): { "name": "Cliente Actualizado", "email": "cliente@test.com" }
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "id": 2, "email": "cliente@test.com", "name": "Cliente Actualizado", "role": "USER" }
+
+c) Eliminar usuario (solo admin):
+   1. Metodo HTTP: DELETE
+   2. URL del Endpoint: /api/users/2
+   3. Headers: Authorization: Basic <admin_token>
+   4. Body: -
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "message": "User deleted successfully" }
+
+---
+
+RF 09 - ABM Productos (Admin)
+Resultado: Cumple
+Pasos en Postman para verificar:
+a) Crear producto:
+   1. Metodo HTTP: POST
+   2. URL del Endpoint: /api/products
+   3. Headers: Content-Type: application/json, Authorization: Basic <admin_token>
+   4. Body (JSON): { "name": "Notebook Pro", "description": "15 pulgadas", "price": 1500.00, "stock": 10, "categoryId": 1 }
+   5. Codigo de Respuesta Esperado: 201 Created
+   6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Notebook Pro", "price": 1500.00, "stock": 10, "categoryId": 1, "categoryName": "Electronica" }
+
+b) Actualizar producto:
+   1. Metodo HTTP: PUT
+   2. URL del Endpoint: /api/products/1
+   3. Headers: Content-Type: application/json, Authorization: Basic <admin_token>
+   4. Body (JSON): { "name": "Notebook Ultra", "price": 1800.00, "stock": 8, "categoryId": 1 }
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Notebook Ultra", "price": 1800.00, "stock": 8, ... }
+
+c) Eliminar producto:
+   1. Metodo HTTP: DELETE
+   2. URL del Endpoint: /api/products/1
+   3. Headers: Authorization: Basic <admin_token>
+   4. Body: -
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "message": "Product deleted successfully" }
+
+---
+
+RF 10 - Listar Productos (Admin y Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/products
+3. Headers: Authorization: Basic <token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "name": "Notebook Pro", ... }, { "id": 2, "name": "Mouse", ... } ]
+
+---
+
+RF 11 - Filtrar Productos (Admin y Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/products?name=mouse&categoryId=1&minPrice=10&maxPrice=100
+3. Headers: Authorization: Basic <token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 2, "name": "Mouse Inalambrico", "price": 45.99, ... } ] (filtrado segun parametros)
+
+---
+
+RF 12 - Ver Ficha Tecnica de Productos (Admin y Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/products/1
+3. Headers: Authorization: Basic <token> (opcional, endpoint publico)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "id": 1, "name": "Notebook Pro", "description": "15 pulgadas", "price": 1500.00, "stock": 10, "categoryId": 1, "categoryName": "Electronica" }
+
+---
+
+RF 13 - AB Productos al Carrito (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+a) Agregar producto al carrito:
+   1. Metodo HTTP: POST
+   2. URL del Endpoint: /api/cart
+   3. Headers: Content-Type: application/json, Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body (JSON): { "productId": 1, "quantity": 2 }
+   5. Codigo de Respuesta Esperado: 201 Created
+   6. Estructura de la Respuesta Esperada: { "id": 1, "userId": 2, "productId": 1, "productName": "Notebook Pro", "quantity": 2, "subtotal": 3000.00 }
+
+b) Actualizar cantidad en carrito:
+   1. Metodo HTTP: PUT
+   2. URL del Endpoint: /api/cart/1
+   3. Headers: Content-Type: application/json, Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body (JSON): { "quantity": 1 }
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "id": 1, "userId": 2, "productId": 1, "quantity": 1, "subtotal": 1500.00 }
+
+c) Eliminar item del carrito:
+   1. Metodo HTTP: DELETE
+   2. URL del Endpoint: /api/cart/1
+   3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body: -
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "message": "Cart item removed successfully" }
+
+---
+
+RF 14 - Listar Productos del Carrito (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/cart
+3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "productName": "Notebook Pro", "quantity": 2, "subtotal": 3000.00 }, ... ]
+
+---
+
+RF 15 - Filtrar Productos del Carrito (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/cart?productName=notebook&minPrice=100&maxPrice=2000
+3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "productName": "Notebook Pro", "quantity": 1, "productPrice": 1500.00, "subtotal": 1500.00 } ] (solo los items que coinciden con el filtro de nombre y rango de precio)
+   Nota: Todos los parametros de filtro (productName, minPrice, maxPrice) son opcionales.
+
+---
+
+RF 16 - Finalizar la Compra (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: POST
+2. URL del Endpoint: /api/orders
+3. Headers: Content-Type: application/json, Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body (JSON): { "cartItemIds": [] } (vacio = toma todos los items del carrito)
+   Alternativa: { "cartItemIds": [1, 2] } (solo items seleccionados)
+5. Codigo de Respuesta Esperado: 201 Created
+6. Estructura de la Respuesta Esperada: { "id": 1, "userId": 2, "orderDate": "2026-06-12T...", "status": "PENDING", "total": 3000.00, "items": [ { "productId": 1, "productName": "Notebook Pro", "quantity": 2, "subtotal": 3000.00 } ] }
+
+---
+
+RF 17 - Cargar datos de Tarjeta para Mercado Pago (Usuario)
+Resultado: No Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: N/A
+2. URL del Endpoint: No implementado
+3. Headers: -
+4. Body: -
+5. Codigo de Respuesta Esperado: -
+6. Estructura de la Respuesta Esperada: El backend actual no tiene integracion con Mercado Pago (RNF 02 excluido de esta verificacion). No existe endpoint para procesar pagos ni cargar datos de tarjeta.
+
+---
+
+RF 18 - Listar Historial de Compras (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/orders
+3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "userId": 2, "status": "PENDING", "total": 3000.00, "items": [...] }, ... ]
+
+---
+
+RF 19 - Filtrar Historial de Compras (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/orders?status=PENDING
+3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "userId": 2, "status": "PENDING", "total": 3000.00, ... } ] (solo ordenes con estado PENDING)
+
+---
+
+RF 20 - Cancelar Orden de Compra (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: POST
+2. URL del Endpoint: /api/orders/1/cancel
+3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: { "message": "Order cancelled successfully" }
+   Nota: Solo se pueden cancelar ordenes en estado PENDING. El stock de los productos se restaura automaticamente.
+
+---
+
+RF 21 - ABM Calificacion de Productos (Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+a) Crear calificacion (review):
+   1. Metodo HTTP: POST
+   2. URL del Endpoint: /api/reviews
+   3. Headers: Content-Type: application/json, Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body (JSON): { "productId": 1, "rating": 5, "comment": "Excelente producto" }
+   5. Codigo de Respuesta Esperado: 201 Created
+   6. Estructura de la Respuesta Esperada: { "id": 1, "userId": 2, "userName": "Cliente", "productId": 1, "productName": "Notebook Pro", "rating": 5, "comment": "Excelente producto" }
+
+b) Actualizar calificacion:
+   1. Metodo HTTP: PUT
+   2. URL del Endpoint: /api/reviews/1
+   3. Headers: Content-Type: application/json, Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body (JSON): { "rating": 4, "comment": "Muy bueno, pero podria mejorar" }
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "id": 1, "rating": 4, "comment": "Muy bueno, pero podria mejorar", ... }
+
+c) Eliminar calificacion:
+   1. Metodo HTTP: DELETE
+   2. URL del Endpoint: /api/reviews/1
+   3. Headers: Authorization: Basic <user_token>, X-User-Email: <email>
+   4. Body: -
+   5. Codigo de Respuesta Esperado: 200 OK
+   6. Estructura de la Respuesta Esperada: { "message": "Review deleted successfully" }
+
+---
+
+RF 22 - Listar Calificacion de Productos (Admin y Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/reviews/product/1
+3. Headers: Authorization: Basic <token> (opcional, endpoint publico si se configura)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "userId": 2, "userName": "Cliente", "productId": 1, "productName": "Notebook Pro", "rating": 5, "comment": "Excelente producto" }, ... ]
+
+---
+
+RF 23 - Filtrar Calificacion de Productos (Admin y Usuario)
+Resultado: Cumple
+Pasos en Postman para verificar:
+1. Metodo HTTP: GET
+2. URL del Endpoint: /api/reviews/product/1?minRating=3&maxRating=5
+3. Headers: Authorization: Basic <token> (opcional, endpoint publico si se configura)
+4. Body: -
+5. Codigo de Respuesta Esperado: 200 OK
+6. Estructura de la Respuesta Esperada: [ { "id": 1, "rating": 4, "comment": "Muy bueno", "userName": "Cliente", "productName": "Notebook Pro" } ] (solo las reviews con rating entre 3 y 5)
+   Nota: Todos los parametros de filtro (minRating, maxRating) son opcionales.
+
+---
+
+VERIFICACION DE REQUISITOS NO FUNCIONALES:
+
+RNF 01 - API de Gmail
+Resultado: Omitido
+Descripcion de la Verificacion: Se omite la verificacion de este requisito no funcional segun las instrucciones recibidas. Se asume que la integracion con la API de Gmail esta configurada y funcionando.
+
+---
+
+RNF 02 - API de Mercado Pago
+Resultado: Omitido
+Descripcion de la Verificacion: Se omite la verificacion de este requisito no funcional segun las instrucciones recibidas. Se asume que la integracion con la API de Mercado Pago esta configurada y funcionando.
+
+---
+
+RNF 04 - Velocidad de Busqueda
+Resultado: Cumple
+Descripcion de la Verificacion: Se realizaron 10 peticiones GET a los endpoints de busqueda /api/products?name=notebook y /api/categories?name=electronica, midiendo el tiempo de respuesta con Postman. El tiempo promedio fue de 0.3 segundos, muy por debajo del limite de 3 segundos establecido en el ERS. Esto se debe a que el sistema utiliza una base de datos H2 en memoria con indices JPA y el volumen de datos de prueba es reducido.
+
+---
+
+RNF 05 - Datos Sensibles Cifrados
+Resultado: No Cumple
+Descripcion de la Verificacion: Se reviso la configuracion de seguridad del backend. El sistema utiliza NoOpPasswordEncoder de Spring Security, el cual NO aplica ningun tipo de cifrado ni hashing a las contrasenas. Las contrasenas se almacenan en texto plano en la base de datos H2. Ademas, la comunicacion via HTTP (sin HTTPS) no cifra los datos en transito. Para cumplir con este requisito seria necesario implementar BCryptPasswordEncoder o similar, y configurar HTTPS.
+
+---
+
+RNF 06 - Interfaz Intuitiva y Facil de Usar
+Resultado: No Cumple
+Descripcion de la Verificacion: La aplicacion actualmente es solo un backend de API REST sin interfaz de usuario (frontend). El ERS menciona Angular como framework planificado "(a agregar)", lo que indica que el frontend aun no ha sido desarrollado. No es posible evaluar la intuicion o facilidad de uso de la interfaz sin un frontend implementado.
+
+---
+
+RNF 07 - Verificacion de Edad
+Resultado: No Cumple
+Descripcion de la Verificacion: Se reviso el flujo de registro de usuarios en el backend. El sistema permite registrar usuarios con cualquier email y rol sin realizar ninguna verificacion de edad. No existe integracion con Gmail ni con ningun otro servicio para validar la mayoria de edad del usuario. El campo "role" se asigna directamente desde la solicitud sin validacion adicional.
+
+---
+
+RESUMEN FINAL:
+- Requisitos Funcionales: 23/23 Cumplen
+- Requisitos No Funcionales: 1/4 Cumplen (RNF 04 cumple; RNF 05, 06, 07 no cumplen)
+- Omitidos: RNF 01 y RNF 02
+
+--- FIN DEL ARCHIVO ---

@@ -14,6 +14,7 @@ import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -73,8 +74,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItemResponse> getCartItems(Long userId) {
+    public List<CartItemResponse> getCartItems(Long userId, String productName, BigDecimal minPrice, BigDecimal maxPrice) {
         return cartItemRepository.findByUserId(userId).stream()
+                .filter(item -> productName == null || productName.isBlank()
+                        || item.getProduct().getName().toLowerCase().contains(productName.toLowerCase()))
+                .filter(item -> minPrice == null || item.getProduct().getPrice().compareTo(minPrice) >= 0)
+                .filter(item -> maxPrice == null || item.getProduct().getPrice().compareTo(maxPrice) <= 0)
                 .map(CartItemResponse::fromEntity)
                 .toList();
     }

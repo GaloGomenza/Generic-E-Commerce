@@ -91,6 +91,12 @@ public class UserServiceImpl implements com.generic.e_commerce.user.service.User
     }
 
     @Override
+    public void logout(String email) {
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+    }
+
+    @Override
     public User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));

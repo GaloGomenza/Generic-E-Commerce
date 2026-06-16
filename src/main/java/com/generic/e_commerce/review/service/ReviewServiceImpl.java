@@ -64,8 +64,10 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewResponse> getReviewsByProduct(Long productId) {
+    public List<ReviewResponse> getReviewsByProduct(Long productId, Integer minRating, Integer maxRating) {
         return reviewRepository.findByProductId(productId).stream()
+                .filter(review -> minRating == null || review.getRating() >= minRating)
+                .filter(review -> maxRating == null || review.getRating() <= maxRating)
                 .map(ReviewResponse::fromEntity)
                 .toList();
     }

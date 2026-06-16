@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -37,8 +38,12 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartItemResponse>> getCartItems(@RequestHeader("X-User-Email") String email) {
-        return ResponseEntity.ok(cartService.getCartItems(getUserId(email)));
+    public ResponseEntity<List<CartItemResponse>> getCartItems(
+            @RequestHeader("X-User-Email") String email,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice) {
+        return ResponseEntity.ok(cartService.getCartItems(getUserId(email), productName, minPrice, maxPrice));
     }
 
     @PutMapping("/{cartItemId}")

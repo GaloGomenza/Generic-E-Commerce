@@ -17,5 +17,6 @@ public interface UserService {
     List<UserResponse> getAllUsers();
     void deleteUser(Long id);
     LoginResponse login(LoginRequest request);
+    void logout(String email);
     User getUserByEmail(String email);
 }
