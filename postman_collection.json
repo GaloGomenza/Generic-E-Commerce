@@ -1,0 +1,1075 @@
+{
+	"info": {
+		"name": "Generic E-Commerce - Presentacion Metodologia",
+		"description": "Coleccion para verificar los 23 RFs contra la API del proyecto Generic E-Commerce.\n\nConfiguracion inicial:\n- Crear un Environment en Postman con:\n  - base_url = http://localhost:8080\n  - admin_email = admin@test.com\n  - admin_password = 123\n  - user_email = cliente@test.com\n  - user_password = 123\n- Ejecutar las requests en orden ascendente (RF 01 primero para obtener el token)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "RF 01-02 - Autenticacion",
+			"description": "Inicio y cierre de sesion",
+			"item": [
+				{
+					"name": "RF 01 - Iniciar Sesion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Token presente', () => pm.expect(pm.response.json().token).to.not.be.empty);",
+									"pm.environment.set('admin_token', pm.response.json().token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{admin_email}}\",\n  \"password\": \"{{admin_password}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/login",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "login"]
+						}
+					}
+				},
+				{
+					"name": "RF 02 - Cerrar Sesion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de logout', () => pm.expect(pm.response.json().message).to.eql('Logged out successfully'));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" },
+							{ "key": "X-User-Email", "value": "{{admin_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/logout",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "logout"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RF 03-08 - Usuarios y Categorias",
+			"item": [
+				{
+					"name": "RF 03 - Ver Ficha Tecnica (Usuario)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Email coincide', () => pm.expect(pm.response.json().email).to.eql(pm.environment.get('admin_email')));",
+									"pm.test('Role presente', () => pm.expect(pm.response.json().role).to.not.be.empty);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" },
+							{ "key": "X-User-Email", "value": "{{admin_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/me",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "me"]
+						}
+					}
+				},
+				{
+					"name": "RF 04a - Crear Categoria (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Categoria creada', () => pm.expect(pm.response.json().id).to.not.be.empty);",
+									"pm.environment.set('category_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Electronica\",\n  \"description\": \"Productos electronicos\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						}
+					}
+				},
+				{
+					"name": "RF 04b - Actualizar Categoria (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Nombre actualizado', () => pm.expect(pm.response.json().name).to.eql('Electronica y Tecnologia'));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Electronica y Tecnologia\",\n  \"description\": \"Actualizado\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 04c - Eliminar Categoria y recrear (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de eliminacion', () => pm.expect(pm.response.json().message).to.eql('Category deleted successfully'));",
+									"",
+									"const catReq = {",
+									"  url: pm.environment.get('base_url') + '/api/categories',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json', 'Authorization': pm.environment.get('admin_token') },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ name: 'Electronica', description: 'Productos electronicos' }) }",
+									"};",
+									"pm.sendRequest(catReq, (err, res) => {",
+									"  if (!err) pm.environment.set('category_id', res.json().id);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 05 - Listar Categorias",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Lista de categorias', () => pm.expect(pm.response.json().length).to.be.at.least(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"]
+						}
+					}
+				},
+				{
+					"name": "RF 06 - Filtrar Categorias",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Filtro aplicado', () => {",
+									"  const cats = pm.response.json();",
+									"  cats.forEach(c => pm.expect(c.name.toLowerCase()).to.include('electronica'));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/categories?name=electronica",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories"],
+							"query": [
+								{ "key": "name", "value": "electronica" }
+							]
+						}
+					}
+				},
+				{
+					"name": "RF 07 - Ver Categoria por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('ID coincide', () => pm.expect(pm.response.json().id.toString()).to.eql(pm.environment.get('category_id')));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/categories/{{category_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "categories", "{{category_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 08a - Registrar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Usuario creado', () => pm.expect(pm.response.json().email).to.eql('cliente@test.com'));",
+									"pm.environment.set('user_id', pm.response.json().id);",
+									"",
+									"const loginReq = {",
+									"  url: pm.environment.get('base_url') + '/api/users/login',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json' },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ email: 'cliente@test.com', password: '123' }) }",
+									"};",
+									"pm.sendRequest(loginReq, (err, res) => {",
+									"  if (!err) pm.environment.set('user_token', res.json().token);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"{{user_email}}\",\n  \"password\": \"{{user_password}}\",\n  \"name\": \"Cliente\",\n  \"role\": \"USER\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/register",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "register"]
+						}
+					}
+				},
+				{
+					"name": "RF 08b - Actualizar Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Nombre actualizado', () => pm.expect(pm.response.json().name).to.eql('Cliente Actualizado'));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Cliente Actualizado\",\n  \"email\": \"{{user_email}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "{{user_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 08c - Eliminar y recrear Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de eliminacion', () => pm.expect(pm.response.json().message).to.eql('User deleted successfully'));",
+									"",
+									"const regReq = {",
+									"  url: pm.environment.get('base_url') + '/api/users/register',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json' },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ email: 'cliente@test.com', password: '123', name: 'Cliente', role: 'USER' }) }",
+									"};",
+									"pm.sendRequest(regReq, (err, res) => {",
+									"  if (!err) {",
+									"    pm.environment.set('user_id', res.json().id);",
+									"    const loginReq = {",
+									"      url: pm.environment.get('base_url') + '/api/users/login',",
+									"      method: 'POST',",
+									"      header: { 'Content-Type': 'application/json' },",
+									"      body: { mode: 'raw', raw: JSON.stringify({ email: 'cliente@test.com', password: '123' }) }",
+									"    };",
+									"    pm.sendRequest(loginReq, (err2, res2) => {",
+									"      if (!err2) pm.environment.set('user_token', res2.json().token);",
+									"    });",
+									"  }",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/users/{{user_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "users", "{{user_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RF 09-12 - Productos",
+			"item": [
+				{
+					"name": "RF 09a - Crear Producto (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Producto creado', () => pm.expect(pm.response.json().id).to.not.be.empty);",
+									"pm.environment.set('product_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Notebook Pro\",\n  \"description\": \"15 pulgadas 16GB RAM\",\n  \"price\": 1500.00,\n  \"stock\": 10,\n  \"categoryId\": {{category_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "RF 09b - Actualizar Producto (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Precio actualizado', () => pm.expect(Number(pm.response.json().price)).to.eql(1800));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Notebook Ultra\",\n  \"price\": 1800.00,\n  \"stock\": 8,\n  \"categoryId\": {{category_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 09c - Eliminar Producto y recrear (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de eliminacion', () => pm.expect(pm.response.json().message).to.eql('Product deleted successfully'));",
+									"",
+									"const prodReq = {",
+									"  url: pm.environment.get('base_url') + '/api/products',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json', 'Authorization': pm.environment.get('admin_token') },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ name: 'Mouse', description: 'Inalambrico', price: 45.99, stock: 20, categoryId: Number(pm.environment.get('category_id')) }) }",
+									"};",
+									"pm.sendRequest(prodReq, (err, res) => {",
+									"  if (!err) pm.environment.set('product_id', res.json().id);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 09d - Crear segundo Producto (Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.environment.set('product2_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Notebook Pro\",\n  \"description\": \"15 pulgadas 16GB RAM\",\n  \"price\": 1500.00,\n  \"stock\": 10,\n  \"categoryId\": {{category_id}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "RF 10 - Listar Productos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Lista de productos', () => pm.expect(pm.response.json().length).to.be.at.least(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/products",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"]
+						}
+					}
+				},
+				{
+					"name": "RF 11 - Filtrar Productos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Filtro aplicado', () => {",
+									"  const prods = pm.response.json();",
+									"  prods.forEach(p => pm.expect(p.name.toLowerCase()).to.include('mouse'));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/products?name=mouse&categoryId={{category_id}}&minPrice=10&maxPrice=100",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products"],
+							"query": [
+								{ "key": "name", "value": "mouse" },
+								{ "key": "categoryId", "value": "{{category_id}}" },
+								{ "key": "minPrice", "value": "10" },
+								{ "key": "maxPrice", "value": "100" }
+							]
+						}
+					}
+				},
+				{
+					"name": "RF 12 - Ver Producto por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('ID coincide', () => pm.expect(pm.response.json().id.toString()).to.eql(pm.environment.get('product_id')));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{admin_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/products/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "products", "{{product_id}}"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RF 13-15 - Carrito",
+			"item": [
+				{
+					"name": "RF 13a - Agregar al Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Item agregado', () => pm.expect(pm.response.json().id).to.not.be.empty);",
+									"pm.environment.set('cart_item_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cart",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart"]
+						}
+					}
+				},
+				{
+					"name": "RF 13b - Actualizar Item del Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Cantidad actualizada', () => pm.expect(pm.response.json().quantity).to.eql(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"quantity\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cart/{{cart_item_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart", "{{cart_item_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 13c - Eliminar Item del Carrito y recrear",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de eliminacion', () => pm.expect(pm.response.json().message).to.eql('Cart item removed successfully'));",
+									"",
+									"const cartReq = {",
+									"  url: pm.environment.get('base_url') + '/api/cart',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json', 'Authorization': pm.environment.get('user_token'), 'X-User-Email': pm.environment.get('user_email') },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ productId: Number(pm.environment.get('product_id')), quantity: 2 }) }",
+									"};",
+									"pm.sendRequest(cartReq, (err, res) => {",
+									"  if (!err) pm.environment.set('cart_item_id', res.json().id);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cart/{{cart_item_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart", "{{cart_item_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 14 - Listar Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Items en carrito', () => pm.expect(pm.response.json().length).to.be.at.least(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cart",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart"]
+						}
+					}
+				},
+				{
+					"name": "RF 15 - Filtrar Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Filtro aplicado', () => {",
+									"  const items = pm.response.json();",
+									"  if (items.length > 0) {",
+									"    items.forEach(i => pm.expect(i.productName.toLowerCase()).to.include('mouse'));",
+									"  }",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/cart?productName=mouse&minPrice=10&maxPrice=100",
+							"host": ["{{base_url}}"],
+							"path": ["api", "cart"],
+							"query": [
+								{ "key": "productName", "value": "mouse" },
+								{ "key": "minPrice", "value": "10" },
+								{ "key": "maxPrice", "value": "100" }
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RF 16-20 - Ordenes",
+			"item": [
+				{
+					"name": "RF 16 - Finalizar Compra",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Orden creada', () => pm.expect(pm.response.json().id).to.not.be.empty);",
+									"pm.test('Estado PENDING', () => pm.expect(pm.response.json().status).to.eql('PENDING'));",
+									"pm.environment.set('order_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cartItemIds\": []\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"]
+						}
+					}
+				},
+				{
+					"name": "RF 17 - Mercado Pago (Omitido)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"]
+						}
+					}
+				},
+				{
+					"name": "RF 18 - Listar Historial de Compras",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Historial de ordenes', () => pm.expect(pm.response.json().length).to.be.at.least(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/orders",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"]
+						}
+					}
+				},
+				{
+					"name": "RF 19 - Filtrar Historial de Compras",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Filtro por estado', () => {",
+									"  const ords = pm.response.json();",
+									"  ords.forEach(o => pm.expect(o.status).to.eql('PENDING'));",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/orders?status=PENDING",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders"],
+							"query": [
+								{ "key": "status", "value": "PENDING" }
+							]
+						}
+					}
+				},
+				{
+					"name": "RF 20 - Cancelar Orden",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de cancelacion', () => pm.expect(pm.response.json().message).to.eql('Order cancelled successfully'));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/orders/{{order_id}}/cancel",
+							"host": ["{{base_url}}"],
+							"path": ["api", "orders", "{{order_id}}", "cancel"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "RF 21-23 - Reviews",
+			"item": [
+				{
+					"name": "RF 21a - Crear Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 201', () => pm.response.to.have.status(201));",
+									"pm.test('Review creada', () => pm.expect(pm.response.json().id).to.not.be.empty);",
+									"pm.environment.set('review_id', pm.response.json().id);"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"productId\": {{product_id}},\n  \"rating\": 5,\n  \"comment\": \"Excelente producto\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/reviews",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reviews"]
+						}
+					}
+				},
+				{
+					"name": "RF 21b - Actualizar Review",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Rating actualizado', () => pm.expect(pm.response.json().rating).to.eql(4));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{ "key": "Content-Type", "value": "application/json" },
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"rating\": 4,\n  \"comment\": \"Muy bueno, pero podria mejorar\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/reviews/{{review_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reviews", "{{review_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 21c - Eliminar Review y recrear",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Mensaje de eliminacion', () => pm.expect(pm.response.json().message).to.eql('Review deleted successfully'));",
+									"",
+									"const revReq = {",
+									"  url: pm.environment.get('base_url') + '/api/reviews',",
+									"  method: 'POST',",
+									"  header: { 'Content-Type': 'application/json', 'Authorization': pm.environment.get('user_token'), 'X-User-Email': pm.environment.get('user_email') },",
+									"  body: { mode: 'raw', raw: JSON.stringify({ productId: Number(pm.environment.get('product_id')), rating: 5, comment: 'Excelente' }) }",
+									"};",
+									"pm.sendRequest(revReq, (err, res) => {",
+									"  if (!err) pm.environment.set('review_id', res.json().id);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" },
+							{ "key": "X-User-Email", "value": "{{user_email}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/reviews/{{review_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reviews", "{{review_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 22 - Listar Reviews de Producto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Reviews del producto', () => pm.expect(pm.response.json().length).to.be.at.least(1));"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/reviews/product/{{product_id}}",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reviews", "product", "{{product_id}}"]
+						}
+					}
+				},
+				{
+					"name": "RF 23 - Filtrar Reviews",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status 200', () => pm.response.to.have.status(200));",
+									"pm.test('Filtro por rating', () => {",
+									"  const reviews = pm.response.json();",
+									"  reviews.forEach(r => {",
+									"    pm.expect(r.rating).to.be.at.least(3);",
+									"    pm.expect(r.rating).to.be.at.most(5);",
+									"  });",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{ "key": "Authorization", "value": "{{user_token}}" }
+						],
+						"url": {
+							"raw": "{{base_url}}/api/reviews/product/{{product_id}}?minRating=3&maxRating=5",
+							"host": ["{{base_url}}"],
+							"path": ["api", "reviews", "product", "{{product_id}}"],
+							"query": [
+								{ "key": "minRating", "value": "3" },
+								{ "key": "maxRating", "value": "5" }
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}
