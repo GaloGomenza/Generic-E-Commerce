@@ -10,6 +10,7 @@ import com.generic.e_commerce.user.dto.response.UserResponse;
 import com.generic.e_commerce.user.model.User;
 import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserServiceImpl implements com.generic.e_commerce.user.service.UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserResponse createUser(CreateUserRequest request) {
@@ -27,7 +29,7 @@ public class UserServiceImpl implements com.generic.e_commerce.user.service.User
         }
         User user = User.builder()
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .role(request.getRole() != null ? request.getRole() : User.Role.USER)
                 .build();
@@ -46,7 +48,7 @@ public class UserServiceImpl implements com.generic.e_commerce.user.service.User
             }
             user.setEmail(request.getEmail());
         }
-        if (request.getPassword() != null) user.setPassword(request.getPassword());
+        if (request.getPassword() != null) user.setPassword(passwordEncoder.encode(request.getPassword()));
         user = userRepository.save(user);
         return UserResponse.fromEntity(user);
     }
@@ -84,10 +86,10 @@ public class UserServiceImpl implements com.generic.e_commerce.user.service.User
     public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UnauthorizedException("Invalid email or password"));
-        if (!user.getPassword().equals(request.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("Invalid email or password");
         }
-        return new LoginResponse("Basic " + user.getEmail() + ":" + user.getPassword(), user.getEmail(), user.getName(), user.getRole().name());
+        return new LoginResponse("Basic " + user.getEmail() + ":" + request.getPassword(), user.getEmail(), user.getName(), user.getRole().name());
     }
 
     @Override
