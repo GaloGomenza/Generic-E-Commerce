@@ -24,7 +24,7 @@ public class ReviewController {
 
     private Long getUserId(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email))
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el email: " + email))
                 .getId();
     }
 
@@ -61,6 +61,6 @@ public class ReviewController {
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long reviewId) {
         reviewService.deleteReview(getUserId(email), reviewId);
-        return ResponseEntity.ok(new ApiResponse("Review deleted successfully"));
+        return ResponseEntity.ok(new ApiResponse("La reseña se borró exitosamente."));
     }
 }

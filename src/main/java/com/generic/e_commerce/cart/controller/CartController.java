@@ -26,7 +26,7 @@ public class CartController {
 
     private Long getUserId(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email))
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el email: " + email))
                 .getId();
     }
 
@@ -59,12 +59,12 @@ public class CartController {
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long cartItemId) {
         cartService.removeCartItem(getUserId(email), cartItemId);
-        return ResponseEntity.ok(new ApiResponse("Cart item removed successfully"));
+        return ResponseEntity.ok(new ApiResponse("El item del carrito se borró exitosamente."));
     }
 
     @DeleteMapping
     public ResponseEntity<ApiResponse> clearCart(@RequestHeader("X-User-Email") String email) {
         cartService.clearCart(getUserId(email));
-        return ResponseEntity.ok(new ApiResponse("Cart cleared successfully"));
+        return ResponseEntity.ok(new ApiResponse("Se vació el carrito exitosamente."));
     }
 }
