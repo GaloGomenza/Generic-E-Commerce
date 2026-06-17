@@ -35,7 +35,7 @@ public class UserController {
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse> logout(@RequestHeader("X-User-Email") String email) {
         userService.logout(email);
-        return ResponseEntity.ok(new ApiResponse("Logged out successfully"));
+        return ResponseEntity.ok(new ApiResponse("Se cerró la sesión exitosamente."));
     }
 
     @GetMapping("/me")
@@ -61,6 +61,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok(new ApiResponse("User deleted successfully"));
+        return ResponseEntity.ok(new ApiResponse("Se borró el usuario exitosamente."));
     }
 }

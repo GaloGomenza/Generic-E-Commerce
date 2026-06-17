@@ -47,6 +47,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
-        return ResponseEntity.ok(new ApiResponse("Product deleted successfully"));
+        return ResponseEntity.ok(new ApiResponse("Producto borrado exitosamente."));
     }
 }

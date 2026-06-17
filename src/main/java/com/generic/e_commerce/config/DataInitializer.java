@@ -8,6 +8,7 @@ import com.generic.e_commerce.user.model.User;
 import com.generic.e_commerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -19,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) {
@@ -26,7 +28,7 @@ public class DataInitializer implements CommandLineRunner {
 
         User admin = User.builder()
                 .email("admin@test.com")
-                .password("123")
+                .password(passwordEncoder.encode("123"))
                 .name("Admin")
                 .role(User.Role.ADMIN)
                 .build();
@@ -34,7 +36,7 @@ public class DataInitializer implements CommandLineRunner {
 
         User user = User.builder()
                 .email("cliente@test.com")
-                .password("123")
+                .password(passwordEncoder.encode("123"))
                 .name("Cliente")
                 .role(User.Role.USER)
                 .build();

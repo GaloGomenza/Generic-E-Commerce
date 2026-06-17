@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse createProduct(ProductRequest request) {
         Category category = categoryRepository.findById(request.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el id: " + request.getCategoryId()));
         Product product = Product.builder()
                 .name(request.getName())
                 .description(request.getDescription())
@@ -38,14 +38,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse updateProduct(Long id, ProductRequest request) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto con el id: " + id));
         if (request.getName() != null) product.setName(request.getName());
         if (request.getDescription() != null) product.setDescription(request.getDescription());
         if (request.getPrice() != null) product.setPrice(request.getPrice());
         if (request.getStock() != null) product.setStock(request.getStock());
         if (request.getCategoryId() != null) {
             Category category = categoryRepository.findById(request.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + request.getCategoryId()));
+                    .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el id: " + request.getCategoryId()));
             product.setCategory(category);
         }
         product = productRepository.save(product);
@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto con el id: " + id));
         return ProductResponse.fromEntity(product);
     }
 
@@ -99,7 +99,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Product not found with id: " + id);
+            throw new ResourceNotFoundException("No se encontró el producto con el id: " + id);
         }
         productRepository.deleteById(id);
     }

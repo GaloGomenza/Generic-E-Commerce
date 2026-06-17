@@ -24,7 +24,7 @@ public class OrderController {
 
     private Long getUserId(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email))
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el email: " + email))
                 .getId();
     }
 
@@ -58,6 +58,6 @@ public class OrderController {
             @RequestHeader("X-User-Email") String email,
             @PathVariable Long orderId) {
         orderService.cancelOrder(getUserId(email), orderId);
-        return ResponseEntity.ok(new ApiResponse("Order cancelled successfully"));
+        return ResponseEntity.ok(new ApiResponse("La orden se canceló exitosamente."));
     }
 }

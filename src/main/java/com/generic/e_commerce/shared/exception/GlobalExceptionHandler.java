@@ -42,37 +42,37 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ErrorResponse> handleMissingHeader(MissingRequestHeaderException ex) {
-        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Missing required header: " + ex.getHeaderName());
+        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Header requerido faltante: " + ex.getHeaderName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorResponse> handleMissingParam(MissingServletRequestParameterException ex) {
-        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Missing required parameter: " + ex.getParameterName());
+        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Parámetro requerido faltante: " + ex.getParameterName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleNotReadable(HttpMessageNotReadableException ex) {
-        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Invalid request body");
+        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Cuerpo de la request inválido.");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ErrorResponse> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Invalid value for parameter: " + ex.getName());
+        ErrorResponse error = new ErrorResponse("BAD_REQUEST", "Valor inválido de parámetro: " + ex.getName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotAllowed(HttpRequestMethodNotSupportedException ex) {
-        ErrorResponse error = new ErrorResponse("METHOD_NOT_ALLOWED", "HTTP method not supported: " + ex.getMethod());
+        ErrorResponse error = new ErrorResponse("METHOD_NOT_ALLOWED", "Método HTTP no soportado: " + ex.getMethod());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(error);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
-        ErrorResponse error = new ErrorResponse("FORBIDDEN", "Access denied");
+        ErrorResponse error = new ErrorResponse("FORBIDDEN", "Acceso denegado.");
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
     }
 
@@ -82,7 +82,7 @@ public class GlobalExceptionHandler {
         for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
-        ErrorResponse error = new ErrorResponse("VALIDATION_ERROR", "Validation failed");
+        ErrorResponse error = new ErrorResponse("VALIDATION_ERROR", "Fallo de validación.");
         error.setDetails(errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
         log.error("Unhandled exception: ", ex);
-        ErrorResponse error = new ErrorResponse("INTERNAL_ERROR", "An unexpected error occurred: " + ex.getMessage());
+        ErrorResponse error = new ErrorResponse("INTERNAL_ERROR", "Ocurrió un error inesperado: " + ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

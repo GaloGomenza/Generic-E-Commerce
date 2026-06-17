@@ -28,19 +28,19 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartItemResponse addToCart(Long userId, AddToCartRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el id: " + userId));
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + request.getProductId()));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto con el id: " + request.getProductId()));
 
         if (request.getQuantity() > product.getStock()) {
-            throw new IllegalArgumentException("Insufficient stock");
+            throw new IllegalArgumentException("Stock insuficiente.");
         }
 
         CartItem existing = cartItemRepository.findByUserIdAndProductId(userId, request.getProductId()).orElse(null);
         if (existing != null) {
             existing.setQuantity(existing.getQuantity() + request.getQuantity());
             if (existing.getQuantity() > product.getStock()) {
-                throw new IllegalArgumentException("Insufficient stock");
+                throw new IllegalArgumentException("Stock insuficiente");
             }
             existing = cartItemRepository.save(existing);
             return CartItemResponse.fromEntity(existing);
@@ -58,14 +58,14 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartItemResponse updateCartItem(Long userId, Long cartItemId, UpdateCartItemRequest request) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + cartItemId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el item de carrito con el id: " + cartItemId));
 
         if (!cartItem.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Cart item does not belong to this user");
+            throw new UnauthorizedException("El item del carrito no le pertenece a este usuario.");
         }
 
         if (request.getQuantity() > cartItem.getProduct().getStock()) {
-            throw new IllegalArgumentException("Insufficient stock");
+            throw new IllegalArgumentException("Stock insuficiente.");
         }
 
         cartItem.setQuantity(request.getQuantity());
@@ -87,9 +87,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeCartItem(Long userId, Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new ResourceNotFoundException("Cart item not found with id: " + cartItemId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el item de carrito con el id: " + cartItemId));
         if (!cartItem.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Cart item does not belong to this user");
+            throw new UnauthorizedException("El item del carrito no le pertenece a este usuario.");
         }
         cartItemRepository.delete(cartItem);
     }

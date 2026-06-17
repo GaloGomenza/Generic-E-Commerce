@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponse createOrder(Long userId, CreateOrderRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el id: " + userId));
 
         List<CartItem> cartItems;
         if (request.getCartItemIds() != null && !request.getCartItemIds().isEmpty()) {
@@ -46,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         if (cartItems.isEmpty()) {
-            throw new IllegalArgumentException("No items to order");
+            throw new IllegalArgumentException("No hay items en la orden.");
         }
 
         List<OrderItem> orderItems = new ArrayList<>();
@@ -87,9 +87,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse getOrderById(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la orden con el id: " + orderId));
         if (!order.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Order does not belong to this user");
+            throw new UnauthorizedException("La orden no le pertenece a este usuario.");
         }
         return OrderResponse.fromEntity(order);
     }
@@ -107,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             orderStatus = Order.OrderStatus.valueOf(status.toUpperCase());
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid status: " + status);
+            throw new IllegalArgumentException("Estado inválido: " + status);
         }
         return orderRepository.findByUserIdAndStatusOrderByOrderDateDesc(userId, orderStatus).stream()
                 .map(OrderResponse::fromEntity)
@@ -118,15 +118,15 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void cancelOrder(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new ResourceNotFoundException("Order not found with id: " + orderId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la orden con el id: " + orderId));
         if (!order.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Order does not belong to this user");
+            throw new UnauthorizedException("La orden no le pertenece a este usuario.");
         }
         if (order.getStatus() == Order.OrderStatus.CANCELLED) {
-            throw new IllegalArgumentException("Order is already cancelled");
+            throw new IllegalArgumentException("La orden ya fue cancelada.");
         }
         if (order.getStatus() != Order.OrderStatus.PENDING) {
-            throw new IllegalArgumentException("Only pending orders can be cancelled");
+            throw new IllegalArgumentException("Solo las ordenes pendientes pueden ser canceladas.");
         }
         order.setStatus(Order.OrderStatus.CANCELLED);
 

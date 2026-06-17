@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse createCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Category name already exists");
+            throw new IllegalArgumentException("Este nombre de categoría ya existe.");
         }
         Category category = Category.builder()
                 .name(request.getName())
@@ -32,10 +32,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el id: " + id));
         if (request.getName() != null && !request.getName().equals(category.getName())) {
             if (categoryRepository.existsByName(request.getName())) {
-                throw new IllegalArgumentException("Category name already exists");
+                throw new IllegalArgumentException("Este nombre de categoría ya existe.");
             }
             category.setName(request.getName());
         }
@@ -49,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el id: " + id));
         return CategoryResponse.fromEntity(category);
     }
 
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Category not found with id: " + id);
+            throw new ResourceNotFoundException("No se encontró la categoría con el id: " + id);
         }
         categoryRepository.deleteById(id);
     }

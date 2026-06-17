@@ -26,9 +26,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse createReview(Long userId, ReviewRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el id: " + userId));
         Product product = productRepository.findById(request.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + request.getProductId()));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto con el id: " + request.getProductId()));
 
         Review review = Review.builder()
                 .user(user)
@@ -43,9 +43,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewResponse updateReview(Long userId, Long reviewId, ReviewRequest request) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la reseña con el id: " + reviewId));
         if (!review.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Review does not belong to this user");
+            throw new UnauthorizedException("La reseña no le pertenece a este usuario.");
         }
         if (request.getRating() != null) review.setRating(request.getRating());
         if (request.getComment() != null) review.setComment(request.getComment());
@@ -56,9 +56,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReview(Long userId, Long reviewId) {
         Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found with id: " + reviewId));
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la reseña con el id: " + reviewId));
         if (!review.getUser().getId().equals(userId)) {
-            throw new UnauthorizedException("Review does not belong to this user");
+            throw new UnauthorizedException("La reseña no le pertenece a este usuario.");
         }
         reviewRepository.delete(review);
     }
