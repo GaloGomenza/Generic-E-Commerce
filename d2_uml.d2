@@ -1,0 +1,289 @@
+direction: right
+
+# ========================================
+# ENUMS
+# ========================================
+Role: {
+  shape: class
+  ADMIN: ""
+  USER: ""
+}
+
+OrderStatus: {
+  shape: class
+  PENDING: ""
+  CONFIRMED: ""
+  SHIPPED: ""
+  DELIVERED: ""
+  CANCELLED: ""
+}
+
+# ========================================
+# ENTITIES (JPA Models)
+# ========================================
+Category: {
+  shape: class
+  id: "Long"
+  name: "String"
+  description: "String"
+}
+
+Product: {
+  shape: class
+  id: "Long"
+  name: "String"
+  description: "String"
+  price: "BigDecimal"
+  stock: "Integer"
+}
+
+User: {
+  shape: class
+  id: "Long"
+  email: "String"
+  password: "String"
+  name: "String"
+  role: "Role"
+}
+
+CartItem: {
+  shape: class
+  id: "Long"
+  quantity: "Integer"
+}
+
+Order: {
+  shape: class
+  id: "Long"
+  orderDate: "LocalDateTime"
+  status: "OrderStatus"
+  total: "BigDecimal"
+}
+
+OrderItem: {
+  shape: class
+  id: "Long"
+  quantity: "Integer"
+  price: "BigDecimal"
+}
+
+Review: {
+  shape: class
+  id: "Long"
+  rating: "Integer"
+  comment: "String"
+}
+
+# ========================================
+# ENTITY RELATIONSHIPS
+# ========================================
+Category -> Product: "1 — 0..* has"
+Product -> CartItem: "1 — 0..* in cart"
+Product -> OrderItem: "1 — 0..* ordered"
+Product -> Review: "1 — 0..* reviewed"
+User -> CartItem: "1 — 0..* owns"
+User -> Order: "1 — 0..* places"
+User -> Review: "1 — 0..* writes"
+Order -> OrderItem: "1 — 1..* contains"
+OrderItem -> Order: "0..* — 1 belongs to"
+OrderItem -> Product: "0..* — 1 references"
+
+# ========================================
+# LAYERED ARCHITECTURE
+# ========================================
+
+# --- CONTROLLERS ---
+UserController: {
+  shape: class
+  fields: ""
+  register: ""
+  login: ""
+  logout: ""
+  getCurrentUser: ""
+  getUserById: ""
+  getAllUsers: ""
+  updateUser: ""
+  deleteUser: ""
+}
+
+CategoryController: {
+  shape: class
+  fields: ""
+  createCategory: ""
+  getAllCategories: ""
+  getCategoryById: ""
+  updateCategory: ""
+  deleteCategory: ""
+}
+
+ProductController: {
+  shape: class
+  fields: ""
+  createProduct: ""
+  getAllProducts: ""
+  getProductById: ""
+  updateProduct: ""
+  deleteProduct: ""
+}
+
+CartController: {
+  shape: class
+  fields: ""
+  addToCart: ""
+  getCartItems: ""
+  updateCartItem: ""
+  removeCartItem: ""
+  clearCart: ""
+}
+
+OrderController: {
+  shape: class
+  fields: ""
+  createOrder: ""
+  getUserOrders: ""
+  getOrderById: ""
+  cancelOrder: ""
+}
+
+ReviewController: {
+  shape: class
+  fields: ""
+  createReview: ""
+  getReviewsByProduct: ""
+  getReviewsByUser: ""
+  updateReview: ""
+  deleteReview: ""
+}
+
+# --- SERVICES ---
+UserService: {
+  shape: class
+  createUser: ""
+  updateUser: ""
+  getUserById: ""
+  getCurrentUser: ""
+  getAllUsers: ""
+  deleteUser: ""
+  login: ""
+  logout: ""
+}
+
+CategoryService: {
+  shape: class
+  createCategory: ""
+  updateCategory: ""
+  getCategoryById: ""
+  getAllCategories: ""
+  searchCategories: ""
+  deleteCategory: ""
+}
+
+ProductService: {
+  shape: class
+  createProduct: ""
+  updateProduct: ""
+  getProductById: ""
+  getAllProducts: ""
+  searchProducts: ""
+  deleteProduct: ""
+}
+
+CartService: {
+  shape: class
+  addToCart: ""
+  updateCartItem: ""
+  getCartItems: ""
+  removeCartItem: ""
+  clearCart: ""
+}
+
+OrderService: {
+  shape: class
+  createOrder: ""
+  getOrderById: ""
+  getUserOrders: ""
+  getUserOrdersByStatus: ""
+  cancelOrder: ""
+}
+
+ReviewService: {
+  shape: class
+  createReview: ""
+  updateReview: ""
+  deleteReview: ""
+  getReviewsByProduct: ""
+  getReviewsByUser: ""
+}
+
+# --- REPOSITORIES ---
+CategoryRepository: {
+  shape: class
+  fields: ""
+}
+
+ProductRepository: {
+  shape: class
+  fields: ""
+}
+
+CartItemRepository: {
+  shape: class
+  fields: ""
+}
+
+OrderRepository: {
+  shape: class
+  fields: ""
+}
+
+OrderItemRepository: {
+  shape: class
+  fields: ""
+}
+
+ReviewRepository: {
+  shape: class
+  fields: ""
+}
+
+UserRepository: {
+  shape: class
+  fields: ""
+}
+
+# ========================================
+# LAYER RELATIONSHIPS
+# ========================================
+
+# Controller → Service
+UserController -> UserService
+CategoryController -> CategoryService
+ProductController -> ProductService
+CartController -> CartService
+OrderController -> OrderService
+ReviewController -> ReviewService
+
+# Service → Repository
+UserService -> UserRepository
+CategoryService -> CategoryRepository
+ProductService -> ProductRepository
+ProductService -> CategoryRepository
+CartService -> CartItemRepository
+CartService -> ProductRepository
+CartService -> UserRepository
+OrderService -> OrderRepository
+OrderService -> UserRepository
+OrderService -> CartItemRepository
+OrderService -> ProductRepository
+ReviewService -> ReviewRepository
+ReviewService -> UserRepository
+ReviewService -> ProductRepository
+
+# Repository → Entity
+CategoryRepository -> Category
+ProductRepository -> Product
+CartItemRepository -> CartItem
+OrderRepository -> Order
+OrderItemRepository -> OrderItem
+ReviewRepository -> Review
+UserRepository -> User
