@@ -35,7 +35,9 @@ public class ReviewServiceImpl implements ReviewService {
 
         List<Order> userOrders = orderRepository.findByUserIdOrderByOrderDateDesc(userId);
         boolean hasPurchased = userOrders.stream()
-                .filter(order -> order.getStatus() != Order.OrderStatus.CANCELLED)
+                .filter(order -> order.getStatus() == Order.OrderStatus.CONFIRMED
+                        || order.getStatus() == Order.OrderStatus.SHIPPED
+                        || order.getStatus() == Order.OrderStatus.DELIVERED)
                 .anyMatch(order -> order.getItems().stream()
                         .anyMatch(item -> item.getProduct().getId().equals(request.getProductId())));
 
