@@ -42,6 +42,9 @@ public class ReviewServiceImpl implements ReviewService {
         if (!hasPurchased)
             throw new IllegalArgumentException("Se debe comprar el producto antes de reseñarlo.");
 
+        if (reviewRepository.existsByUserIdAndProductId(userId, request.getProductId()))
+            throw new IllegalArgumentException("Ya se hizo una reseña de este producto.");
+
         Review review = Review.builder()
                 .user(user)
                 .product(product)
