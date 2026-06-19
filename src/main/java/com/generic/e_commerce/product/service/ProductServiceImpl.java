@@ -22,6 +22,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse createProduct(ProductRequest request) {
+        if (productRepository.existsByName(request.getName())) {
+            throw new IllegalArgumentException("Ya existe un producto con el nombre: " + request.getName());
+        }
         Category category = categoryRepository.findById(request.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró la categoría con el id: " + request.getCategoryId()));
         Product product = Product.builder()
