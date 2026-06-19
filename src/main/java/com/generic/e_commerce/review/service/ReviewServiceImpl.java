@@ -1,5 +1,7 @@
 package com.generic.e_commerce.review.service;
 
+import com.generic.e_commerce.order.model.Order;
+import com.generic.e_commerce.order.repository.OrderRepository;
 import com.generic.e_commerce.product.model.Product;
 import com.generic.e_commerce.product.repository.ProductRepository;
 import com.generic.e_commerce.review.dto.request.ReviewRequest;
@@ -22,6 +24,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
 
     @Override
     public ReviewResponse createReview(Long userId, ReviewRequest request) {
@@ -29,6 +32,15 @@ public class ReviewServiceImpl implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró el usuario con el id: " + userId));
         Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró el producto con el id: " + request.getProductId()));
+
+        List<Order> userOrders = orderRepository.findByUserIdOrderByOrderDateDesc(userId);
+        boolean hasPurchased = userOrders.stream()
+                .filter(order -> order.getStatus() != Order.OrderStatus.CANCELLED)
+                .anyMatch(order -> order.getItems().stream()
+                        .anyMatch(item -> item.getProduct().getId().equals(request.getProductId())));
+
+        if (!hasPurchased)
+            throw new IllegalArgumentException("Se debe comprar el producto antes de reseñarlo.");
 
         Review review = Review.builder()
                 .user(user)
