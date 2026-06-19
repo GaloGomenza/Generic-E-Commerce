@@ -53,6 +53,13 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrderById(getUserId(email), orderId));
     }
 
+    @PostMapping("/{orderId}/pay")
+    public ResponseEntity<OrderResponse> payOrder(
+            @RequestHeader("X-User-Email") String email,
+            @PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.payOrder(getUserId(email), orderId));
+    }
+
     @PostMapping("/{orderId}/cancel")
     public ResponseEntity<ApiResponse> cancelOrder(
             @RequestHeader("X-User-Email") String email,

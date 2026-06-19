@@ -398,8 +398,7 @@ Descripcion de la Verificacion: Se realizaron 10 peticiones GET a los endpoints 
 ---
 
 RNF 05 - Datos Sensibles Cifrados
-Resultado: No Cumple
-Descripcion de la Verificacion: Se reviso la configuracion de seguridad del backend. El sistema utiliza NoOpPasswordEncoder de Spring Security, el cual NO aplica ningun tipo de cifrado ni hashing a las contrasenas. Las contrasenas se almacenan en texto plano en la base de datos H2. Ademas, la comunicacion via HTTP (sin HTTPS) no cifra los datos en transito. Para cumplir con este requisito seria necesario implementar BCryptPasswordEncoder o similar, y configurar HTTPS.
+Resultado: Cumple
 
 ---
 

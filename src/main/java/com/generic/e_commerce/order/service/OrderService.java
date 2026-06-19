@@ -11,4 +11,5 @@ public interface OrderService {
     List<OrderResponse> getUserOrders(Long userId);
     List<OrderResponse> getUserOrdersByStatus(Long userId, String status);
     void cancelOrder(Long userId, Long orderId);
+    OrderResponse payOrder(Long userId, Long orderId);
 }

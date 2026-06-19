@@ -41,6 +41,7 @@ ORDENES (/api/orders)
 POST   /api/orders                - Crear orden / finalizar compra (requiere X-User-Email)
 GET    /api/orders?status=        - Listar/filtrar historial de compras (requiere X-User-Email)
 GET    /api/orders/{orderId}      - Obtener orden por ID (requiere X-User-Email)
+POST   /api/orders/{orderId}/pay    - Pagar/pagar orden pendiente (requiere X-User-Email)
 POST   /api/orders/{orderId}/cancel - Cancelar orden (requiere X-User-Email)
 
 REVIEWS (/api/reviews)

@@ -116,6 +116,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
+    public OrderResponse payOrder(Long userId, Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("No se encontró la orden con el id: " + orderId));
+        if (!order.getUser().getId().equals(userId)) {
+            throw new UnauthorizedException("La orden no le pertenece a este usuario.");
+        }
+        if (order.getStatus() != Order.OrderStatus.PENDING) {
+            throw new IllegalArgumentException("Solo las ordenes pendientes pueden ser pagadas.");
+        }
+        order.setStatus(Order.OrderStatus.CONFIRMED);
+        order = orderRepository.save(order);
+        return OrderResponse.fromEntity(order);
+    }
+
+    @Override
+    @Transactional
     public void cancelOrder(Long userId, Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("No se encontró la orden con el id: " + orderId));

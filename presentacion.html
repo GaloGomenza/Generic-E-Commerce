@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generic E-Commerce - Presentacion</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Inter, sans-serif; background: #0f172a; color: #e2e8f0; }
+  .slide {
+    min-height: 100vh; padding: 60px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    scroll-snap-align: start; position: relative;
+  }
+  .slide-content { max-width: 1100px; width: 100%; }
+  h1 { font-size: 3.5rem; font-weight: 800; background: linear-gradient(135deg,#60a5fa,#a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+  h2 { font-size: 2rem; font-weight: 700; color: #60a5fa; margin-bottom: 24px; }
+  h3 { font-size: 1.3rem; font-weight: 600; color: #94a3b8; margin-bottom: 16px; }
+  .subtitle { font-size: 1.2rem; color: #94a3b8; font-weight: 300; }
+  .grid-2, .grid-3 { display: grid; gap: 20px; width: 100%; }
+  .grid-2 { grid-template-columns: 1fr 1fr; }
+  .grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .card {
+    background: #1e293b; border-radius: 12px; padding: 24px;
+    border: 1px solid #334155; transition: .3s;
+  }
+  .card:hover { border-color: #60a5fa; transform: translateY(-2px); }
+  .card .icon { font-size: 2rem; margin-bottom: 12px; }
+  .card h4 { color: #60a5fa; font-size: 1.1rem; margin-bottom: 8px; }
+  .card p, .card li { color: #94a3b8; font-size: .9rem; line-height: 1.6; }
+  .card ul { list-style: none; }
+  .card ul li::before { content: "▹ "; color: #60a5fa; }
+  .tag {
+    display: inline-block; background: #1e293b; color: #60a5fa;
+    padding: 4px 12px; border-radius: 20px; font-size: .8rem;
+    border: 1px solid #334155; margin: 2px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #334155; }
+  th { color: #60a5fa; font-weight: 600; }
+  td { color: #cbd5e1; }
+  .nav-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(15,23,42,.85); backdrop-filter: blur(8px);
+    padding: 12px 24px; display: flex; justify-content: space-between;
+    align-items: center; border-bottom: 1px solid #334155;
+  }
+  .nav-bar .title { font-weight: 700; color: #60a5fa; }
+  .nav-bar .controls { display: flex; gap: 8px; }
+  .nav-bar button {
+    background: #1e293b; color: #e2e8f0; border: 1px solid #334155;
+    padding: 6px 14px; border-radius: 6px; cursor: pointer;
+    transition: .2s; font-size: .85rem;
+  }
+  .nav-bar button:hover { background: #334155; }
+  .counter { color: #64748b; font-size: .85rem; }
+  .footer-note { position: absolute; bottom: 20px; color: #475569; font-size: .8rem; }
+  .feature-list { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 20px; }
+  .feature-item {
+    background: #1e293b; border: 1px solid #334155; border-radius: 10px;
+    padding: 16px 20px; text-align: center; flex: 1; min-width: 140px;
+  }
+  .feature-item .num { font-size: 1.8rem; font-weight: 800; color: #60a5fa; }
+  .feature-item .lab { font-size: .8rem; color: #94a3b8; margin-top: 4px; }
+  .method-post { color: #34d399; font-weight: 600; }
+  .method-get { color: #60a5fa; font-weight: 600; }
+  .method-put { color: #fbbf24; font-weight: 600; }
+  .method-delete { color: #f87171; font-weight: 600; }
+  @media (max-width: 768px) {
+    .slide { padding: 40px 20px; }
+    h1 { font-size: 2.2rem; }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-bar">
+  <span class="title">Generic E-Commerce</span>
+  <div class="controls">
+    <span class="counter" id="counter">1 / 9</span>
+    <button onclick="go(-1)">◀</button>
+    <button onclick="go(1)">▶</button>
+  </div>
+</div>
+
+<!-- Slide 1 - Portada -->
+<div class="slide" id="s0">
+  <div class="slide-content" style="text-align:center">
+    <div style="font-size:4rem;margin-bottom:16px">🛒</div>
+    <h1>Generic E-Commerce</h1>
+    <p class="subtitle" style="font-size:1.4rem;margin-bottom:8px">Backend API REST</p>
+    <p class="subtitle">Spring Boot · Java 21 · JPA · Spring Security</p>
+    <div style="margin-top:40px">
+      <span class="tag">Spring Boot 4.0.6</span>
+      <span class="tag">Java 21</span>
+      <span class="tag">Spring Data JPA</span>
+      <span class="tag">Spring Security</span>
+      <span class="tag">H2 Database</span>
+      <span class="tag">Lombok</span>
+      <span class="tag">Maven</span>
+    </div>
+  </div>
+  <div class="footer-note">Sistema de Comercio Electronico — Backend API</div>
+</div>
+
+<!-- Slide 2 - Que es -->
+<div class="slide" id="s1">
+  <div class="slide-content">
+    <h2>¿Que es Generic E-Commerce?</h2>
+    <div class="grid-2">
+      <div class="card">
+        <div class="icon">🛍️</div>
+        <h4>Backend de una aplicacion web de e-commerce</h4>
+        <p>API REST que expone toda la funcionalidad de un sistema de comercio electronico: gestion de usuarios, catalogo de productos, carrito de compras, procesamiento de ordenes y sistema de calificaciones.</p>
+        <p style="margin-top:12px">Consumible desde cualquier frontend (Angular, React, Vue) o herramienta como Postman.</p>
+      </div>
+      <div class="card">
+        <h4>Funcionalidades principales</h4>
+        <ul>
+          <li>Registro y autenticacion de usuarios</li>
+          <li>Roles: ADMIN (gestiona catalogo) y USER (compra)</li>
+          <li>CRUD completo de categorias y productos</li>
+          <li>Carrito de compras persistente por usuario</li>
+          <li>Creacion y cancelacion de ordenes</li>
+          <li>Sistema de calificaciones y reviews</li>
+          <li>Filtros y busquedas en cada modulo</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 3 - Arquitectura -->
+<div class="slide" id="s2">
+  <div class="slide-content">
+    <h2>Arquitectura MVC</h2>
+    <div style="display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:24px">
+      <div class="card" style="text-align:center;min-width:160px">
+        <div class="icon" style="font-size:2.5rem">🌐</div>
+        <h4>Cliente HTTP</h4>
+        <p style="font-size:.8rem">Postman, Frontend, curl</p>
+      </div>
+      <div style="color:#475569;font-size:2rem">→</div>
+      <div class="card" style="text-align:center;min-width:160px;border-color:#60a5fa">
+        <div class="icon" style="font-size:2.5rem">🎮</div>
+        <h4>Controller</h4>
+        <p style="font-size:.8rem">6 controladores REST</p>
+      </div>
+      <div style="color:#475569;font-size:2rem">→</div>
+      <div class="card" style="text-align:center;min-width:160px;border-color:#a78bfa">
+        <div class="icon" style="font-size:2.5rem">⚙️</div>
+        <h4>Service</h4>
+        <p style="font-size:.8rem">Logica de negocio</p>
+      </div>
+      <div style="color:#475569;font-size:2rem">→</div>
+      <div class="card" style="text-align:center;min-width:160px;border-color:#34d399">
+        <div class="icon" style="font-size:2.5rem">🗄️</div>
+        <h4>Repository</h4>
+        <p style="font-size:.8rem">7 repositorios JPA</p>
+      </div>
+      <div style="color:#475569;font-size:2rem">→</div>
+      <div class="card" style="text-align:center;min-width:160px">
+        <div class="icon" style="font-size:2.5rem">💾</div>
+        <h4>H2 DB</h4>
+        <p style="font-size:.8rem">En memoria</p>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h4>Controller</h4>
+        <p>Reciben requests HTTP, validan parametros, delegan a servicios y devuelven respuestas JSON.</p>
+      </div>
+      <div class="card">
+        <h4>Service</h4>
+        <p>Contienen la logica de negocio. Orquestan operaciones entre repositorios y aplican reglas de dominio.</p>
+      </div>
+      <div class="card">
+        <h4>Repository</h4>
+        <p>Acceso a datos via Spring Data JPA. Proporcionan CRUD automatico y metodos de busqueda personalizados.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 4 - Stack -->
+<div class="slide" id="s3">
+  <div class="slide-content">
+    <h2>Stack Tecnologico</h2>
+    <div class="grid-3">
+      <div class="card">
+        <h4>Backend</h4>
+        <ul>
+          <li>Spring Boot 4.0.6</li>
+          <li>Java 21</li>
+          <li>Spring Web (REST)</li>
+          <li>Spring Data JPA (Hibernate)</li>
+          <li>Spring Security</li>
+          <li>Jakarta Validation</li>
+          <li>Lombok</li>
+          <li>Maven</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Base de datos</h4>
+        <ul>
+          <li>H2 Database (en memoria)</li>
+          <li>Consola web en /h2-console</li>
+          <li>DDL auto: update</li>
+          <li>Datos iniciales cargados por DataInitializer</li>
+          <li>Configuracion via application.yaml</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Seguridad</h4>
+        <ul>
+          <li>HTTP Basic Authentication</li>
+          <li>Sesiones stateless</li>
+          <li>Roles: ADMIN y USER</li>
+          <li>CORS habilitado</li>
+          <li>Rutas publicas protegidas por matchers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 5 - Modelo de Datos -->
+<div class="slide" id="s4">
+  <div class="slide-content">
+    <h2>Modelo de Datos</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Entidades JPA</h4>
+        <table>
+          <tr><th>Entidad</th><th>Atributos principales</th></tr>
+          <tr><td>User</td><td>id, email, password, name, role (ADMIN/USER)</td></tr>
+          <tr><td>Category</td><td>id, name, description</td></tr>
+          <tr><td>Product</td><td>id, name, description, price (BigDecimal), stock</td></tr>
+          <tr><td>CartItem</td><td>id, quantity — vinculado a User y Product</td></tr>
+          <tr><td>Order</td><td>id, orderDate, status (PENDING/CANCELLED), total</td></tr>
+          <tr><td>OrderItem</td><td>id, quantity, price (precio al momento de la compra)</td></tr>
+          <tr><td>Review</td><td>id, rating (1-5), comment — vinculado a User y Product</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Relaciones entre entidades</h4>
+        <table>
+          <tr><th>Relacion</th><th>Tipo</th></tr>
+          <tr><td>Categoria → Producto</td><td>1 a N</td></tr>
+          <tr><td>Usuario → CartItem</td><td>1 a N</td></tr>
+          <tr><td>Usuario → Orden</td><td>1 a N</td></tr>
+          <tr><td>Usuario → Review</td><td>1 a N</td></tr>
+          <tr><td>Producto → CartItem</td><td>1 a N</td></tr>
+          <tr><td>Producto → OrderItem</td><td>1 a N</td></tr>
+          <tr><td>Producto → Review</td><td>1 a N</td></tr>
+          <tr><td>Orden → OrderItem</td><td>1 a N</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 6 - API Endpoints -->
+<div class="slide" id="s5">
+  <div class="slide-content">
+    <h2>API Endpoints</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Usuarios <span class="tag" style="font-size:.7rem">8 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/users/register</td><td style="color:#64748b">Registro publico</td></tr>
+          <tr><td><span class="method-post">POST</span></td><td>/api/users/login</td><td style="color:#64748b">Inicio de sesion</td></tr>
+          <tr><td><span class="method-post">POST</span></td><td>/api/users/logout</td><td style="color:#64748b">Cierre de sesion</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/users/me</td><td style="color:#64748b">Perfil actual</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/users</td><td style="color:#64748b">Listar (solo ADMIN)</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/users/{id}</td><td style="color:#64748b">Por ID</td></tr>
+          <tr><td><span class="method-put">PUT</span></td><td>/api/users/{id}</td><td style="color:#64748b">Actualizar</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/users/{id}</td><td style="color:#64748b">Eliminar</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Categorias <span class="tag" style="font-size:.7rem">5 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/categories</td><td style="color:#64748b">Crear (ADMIN)</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/categories?name=</td><td style="color:#64748b">Listar / filtrar</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/categories/{id}</td><td style="color:#64748b">Por ID</td></tr>
+          <tr><td><span class="method-put">PUT</span></td><td>/api/categories/{id}</td><td style="color:#64748b">Actualizar (ADMIN)</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/categories/{id}</td><td style="color:#64748b">Eliminar (ADMIN)</td></tr>
+        </table>
+        <h4 style="margin-top:16px">Productos <span class="tag" style="font-size:.7rem">5 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/products</td><td style="color:#64748b">Crear (ADMIN)</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/products?name=&categoryId=&minPrice=&maxPrice=</td><td style="color:#64748b">Listar / filtrar</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/products/{id}</td><td style="color:#64748b">Por ID</td></tr>
+          <tr><td><span class="method-put">PUT</span></td><td>/api/products/{id}</td><td style="color:#64748b">Actualizar (ADMIN)</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/products/{id}</td><td style="color:#64748b">Eliminar (ADMIN)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Carrito <span class="tag" style="font-size:.7rem">5 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/cart</td><td style="color:#64748b">Agregar item</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/cart?productName=&minPrice=&maxPrice=</td><td style="color:#64748b">Listar / filtrar</td></tr>
+          <tr><td><span class="method-put">PUT</span></td><td>/api/cart/{id}</td><td style="color:#64748b">Actualizar cantidad</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/cart/{id}</td><td style="color:#64748b">Eliminar item</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/cart</td><td style="color:#64748b">Vaciar carrito</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h4>Ordenes <span class="tag" style="font-size:.7rem">5 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/orders</td><td style="color:#64748b">Finalizar compra</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/orders?status=</td><td style="color:#64748b">Historial / filtrar</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/orders/{id}</td><td style="color:#64748b">Orden por ID</td></tr>
+          <tr><td><span class="method-post">POST</span></td><td>/api/orders/{id}/pay</td><td style="color:#64748b">Pagar orden</td></tr>
+          <tr><td><span class="method-post">POST</span></td><td>/api/orders/{id}/cancel</td><td style="color:#64748b">Cancelar orden</td></tr>
+        </table>
+        <h4 style="margin-top:16px">Reviews <span class="tag" style="font-size:.7rem">5 endpoints</span></h4>
+        <table>
+          <tr><td><span class="method-post">POST</span></td><td>/api/reviews</td><td style="color:#64748b">Crear calificacion</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/reviews/product/{id}?minRating=&maxRating=</td><td style="color:#64748b">Listar / filtrar</td></tr>
+          <tr><td><span class="method-get">GET</span></td><td>/api/reviews/user</td><td style="color:#64748b">Mis calificaciones</td></tr>
+          <tr><td><span class="method-put">PUT</span></td><td>/api/reviews/{id}</td><td style="color:#64748b">Actualizar</td></tr>
+          <tr><td><span class="method-delete">DEL</span></td><td>/api/reviews/{id}</td><td style="color:#64748b">Eliminar</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="feature-list" style="margin-top:8px">
+      <div class="feature-item"><div class="num">33</div><div class="lab">Endpoints totales</div></div>
+      <div class="feature-item"><div class="num">10</div><div class="lab">POST</div></div>
+      <div class="feature-item"><div class="num">13</div><div class="lab">GET</div></div>
+      <div class="feature-item"><div class="num">5</div><div class="lab">PUT</div></div>
+      <div class="feature-item"><div class="num">5</div><div class="lab">DELETE</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7 - Seguridad -->
+<div class="slide" id="s6">
+  <div class="slide-content">
+    <h2>Seguridad</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h4>Autenticacion HTTP Basic</h4>
+        <p>El cliente envia el header <code>Authorization: Basic &lt;base64(email:password)&gt;</code> en cada request. El servidor no mantiene estado de sesion (stateless).</p>
+        <pre style="background:#0f172a;padding:12px;border-radius:8px;margin-top:12px;font-size:.8rem;color:#94a3b8;overflow-x:auto">
+Authorization: Basic YWRtaW5AdGVzdC5jb206MTIz
+        </pre>
+        <p style="margin-top:12px;color:#64748b;font-size:.8rem">Login devuelve el token: <code>Basic admin@test.com:123</code></p>
+      </div>
+      <div class="card">
+        <h4>Reglas de acceso por ruta</h4>
+        <table>
+          <tr><th>Ruta</th><th style="text-align:center">Acceso</th></tr>
+          <tr><td>/api/users/register</td><td style="text-align:center"><span style="color:#34d399">Publico</span></td></tr>
+          <tr><td>/api/users/login</td><td style="text-align:center"><span style="color:#34d399">Publico</span></td></tr>
+          <tr><td>GET /api/categories/**</td><td style="text-align:center"><span style="color:#34d399">Publico</span></td></tr>
+          <tr><td>GET /api/products/**</td><td style="text-align:center"><span style="color:#34d399">Publico</span></td></tr>
+          <tr><td>/h2-console/**</td><td style="text-align:center"><span style="color:#34d399">Publico</span></td></tr>
+          <tr><td>GET /api/users</td><td style="text-align:center"><span style="color:#fbbf24">Solo ADMIN</span></td></tr>
+          <tr><td>POST/PUT/DELETE categorias</td><td style="text-align:center"><span style="color:#fbbf24">Solo ADMIN</span></td></tr>
+          <tr><td>POST/PUT/DELETE productos</td><td style="text-align:center"><span style="color:#fbbf24">Solo ADMIN</span></td></tr>
+          <tr><td>Demas rutas</td><td style="text-align:center"><span style="color:#f87171">Autenticado</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8 - Estructura del proyecto -->
+<div class="slide" id="s7">
+  <div class="slide-content">
+    <h2>Estructura del Proyecto</h2>
+    <div class="grid-2">
+      <div class="card">
+        <pre style="font-size:.75rem;line-height:1.8;color:#94a3b8;overflow-x:auto">
+src/main/java/com/generic/e_commerce/
+├── config/
+│   ├── DataInitializer.java
+│   ├── H2ConsoleConfig.java
+│   ├── SecurityConfig.java
+│   └── WebConfig.java
+│
+├── category/
+│   ├── controller/CategoryController.java
+│   ├── service/CategoryService*.java
+│   ├── repository/CategoryRepository.java
+│   ├── model/Category.java
+│   └── dto/{request,response}/
+│
+├── product/
+│   ├── controller/ProductController.java
+│   ├── service/ProductService*.java
+│   ├── repository/ProductRepository.java
+│   ├── model/Product.java
+│   └── dto/{request,response}/
+│
+├── cart/
+│   ├── controller/CartController.java
+│   ├── service/CartService*.java
+│   ├── repository/CartItemRepository.java
+│   ├── model/CartItem.java
+│   └── dto/{request,response}/
+│
+├── order/
+│   ├── controller/OrderController.java
+│   ├── service/OrderService*.java
+│   ├── repository/Order*.java
+│   ├── model/Order*.java
+│   └── dto/{request,response}/
+│
+├── review/
+│   ├── controller/ReviewController.java
+│   ├── service/ReviewService*.java
+│   ├── repository/ReviewRepository.java
+│   ├── model/Review.java
+│   └── dto/{request,response}/
+│
+├── user/
+│   ├── controller/UserController.java
+│   ├── service/UserService*.java
+│   ├── repository/UserRepository.java
+│   ├── model/User.java
+│   └── dto/{request,response}/
+│
+└── shared/
+    ├── dto/  exception/  security/  utils/
+        </pre>
+      </div>
+      <div class="card">
+        <h4>Organizacion por modulos</h4>
+        <p>Cada modulo de negocio (category, product, cart, order, review, user) sigue la misma estructura de paquetes:</p>
+        <ul>
+          <li><strong>controller/</strong> — Endpoints REST</li>
+          <li><strong>service/</strong> — Interface + implementacion</li>
+          <li><strong>repository/</strong> — Acceso a datos JPA</li>
+          <li><strong>model/</strong> — Entidades JPA</li>
+          <li><strong>dto/request/</strong> — DTOs de entrada</li>
+          <li><strong>dto/response/</strong> — DTOs de salida</li>
+        </ul>
+        <div style="margin-top:16px;padding:12px;background:#0f172a;border-radius:8px">
+          <p style="color:#60a5fa;font-size:.85rem">📁 <strong>config/</strong> — Configuracion centralizada (seguridad, CORS, H2, datos iniciales)</p>
+          <p style="color:#94a3b8;font-size:.85rem;margin-top:4px">📁 <strong>shared/</strong> — Componentes transversales (excepciones, DTOs genericos, seguridad)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9 - Cierre -->
+<div class="slide" id="s8">
+  <div class="slide-content" style="text-align:center">
+    <div style="font-size:4rem;margin-bottom:16px">🚀</div>
+    <h1>Generic E-Commerce</h1>
+    <p class="subtitle" style="font-size:1.4rem;margin-bottom:8px">Backend API REST</p>
+    <p class="subtitle">Spring Boot · Java 21 · JPA · Spring Security</p>
+    <div style="margin-top:40px">
+      <span class="tag">33 endpoints</span>
+      <span class="tag">7 entidades</span>
+      <span class="tag">6 modulos</span>
+      <span class="tag">HTTP Basic Auth</span>
+    </div>
+    <p class="subtitle" style="margin-top:40px;font-size:.95rem">Navegacion con flechas ◀ ▶ · Scroll vertical</p>
+    <p class="subtitle" style="margin-top:8px;color:#64748b;font-size:.85rem">Generic E-Commerce — Backend API REST con Spring Boot</p>
+  </div>
+  <div class="footer-note">Presentacion del funcionamiento de la aplicacion</div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+function showSlide(n) {
+  slides.forEach((s,i) => s.style.display = i === n ? 'flex' : 'none');
+  document.getElementById('counter').textContent = (n+1) + ' / ' + slides.length;
+}
+function go(dir) {
+  current = Math.max(0, Math.min(slides.length-1, current + dir));
+  showSlide(current);
+}
+showSlide(0);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+</script>
+</body>
+</html>
